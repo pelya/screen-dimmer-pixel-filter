@@ -51,6 +51,8 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
             }
         });
 
+        CheckBox c = (CheckBox)findViewById(R.id.enableFilter);
+        c.setOnCheckedChangeListener(this);
     }
 
     @Override
