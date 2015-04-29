@@ -58,7 +58,8 @@
                     style="?android:attr/buttonStyleSmall"
                     android:text="Delete"
                     android:id="@+id/deletePreset"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 

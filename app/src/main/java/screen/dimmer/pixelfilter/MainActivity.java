@@ -1,5 +1,8 @@
 package screen.dimmer.pixelfilter;
 
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +24,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Cfg.Init(this);
 
         for (int i = 0; i < Grids.Id.length; i++) {
             final int idx = i;
@@ -29,6 +33,13 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     Log.d(LOG, "Clicked grid, idx " + idx + " checked " + isChecked);
+                    ((CheckBox) findViewById(R.id.enableFilter)).setChecked(false);
+                    Cfg.Pattern = Grids.PatternIdCustom;
+                    for (int i = 0; i < Grids.Id.length; i++) {
+                        CheckBox c = (CheckBox) findViewById(Grids.Id[i]);
+                        Grids.Patterns[Cfg.Pattern][i] = (byte)(c.isChecked() ? 1 : 0);
+                    }
+                    ((Spinner) findViewById(R.id.spinner)).setSelection(Cfg.Pattern, true);
                 }
             });
         }
@@ -45,6 +56,9 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                     CheckBox c = (CheckBox) findViewById(Grids.Id[i]);
                     c.setChecked(Grids.Patterns[(int) id][i] != (byte) 0);
                 }
+                Cfg.Pattern = (int)id;
+                ((CheckBox) findViewById(R.id.enableFilter)).setChecked(false);
+                ((Spinner) findViewById(R.id.spinner)).setSelection((int)id, true);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -58,6 +72,27 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Log.d(LOG, "Enabling screen filter: " + isChecked);
+        Intent intent = new Intent(this, FilterService.class);
+        if (isChecked) {
+            PendingIntent show = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent cancel = PendingIntent.getService(this, 0, new Intent(this, MainActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_CANCEL_CURRENT);
+
+            Notification ntf = new Notification.Builder(this)
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setLargeIcon(R.drawable.ic_launcher)
+                    .setContentTitle(R.string.filter_active)
+                    .setContentText(R.string.filter_active_2)
+                    .setLocalOnly(true)
+                    .setDeleteIntent(cancel)
+                    .setSound(null)
+                    //.setAutoCancel(true)
+                    .setContentIntent(show)
+                    .build();
+
+            startService(intent);
+        } else {
+            stopService(intent);
+        }
     }
 
 

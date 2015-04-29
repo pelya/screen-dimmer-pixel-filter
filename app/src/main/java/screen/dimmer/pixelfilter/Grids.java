@@ -3,7 +3,7 @@ package screen.dimmer.pixelfilter;
 public class Grids {
 
     public static final int GridSize = 64;
-    public static final int GridDimensions = 8;
+    public static final int GridSideSize = 64;
 
     public static int Id[] = new int[] {
             R.id.checkBox1 ,R.id.checkBox2, R.id.checkBox3, R.id.checkBox4, R.id.checkBox5, R.id.checkBox6, R.id.checkBox7, R.id.checkBox8,
@@ -16,8 +16,9 @@ public class Grids {
             R.id.checkBox57,R.id.checkBox58,R.id.checkBox59,R.id.checkBox60,R.id.checkBox61,R.id.checkBox62,R.id.checkBox63,R.id.checkBox64,
     };
 
-    public static String[] PatternNames = new String[]{
+    public static final int PatternIdCustom = 7;
 
+    public static String[] PatternNames = new String[]{
             "12%",
             "25%",
             "38%",
@@ -26,6 +27,7 @@ public class Grids {
             "62%",
             "75%",
             "88%",
+            "Custom",
     };
 
     public static byte[][] Patterns = new byte[][] {
@@ -100,6 +102,16 @@ public class Grids {
                     1, 1, 1, 0, 1, 1, 1, 0,
             },
             {
+                    0, 1, 1, 1, 1, 1, 1, 1,
+                    1, 1, 1, 0, 1, 1, 1, 1,
+                    1, 1, 1, 1, 1, 1, 0, 1,
+                    1, 0, 1, 1, 1, 1, 1, 1,
+                    1, 1, 1, 1, 1, 0, 1, 1,
+                    1, 1, 0, 1, 1, 1, 1, 1,
+                    1, 1, 1, 1, 1, 1, 1, 0,
+                    1, 1, 1, 1, 0, 1, 1, 1,
+            },
+            { // Custom pattern
                     0, 1, 1, 1, 1, 1, 1, 1,
                     1, 1, 1, 0, 1, 1, 1, 1,
                     1, 1, 1, 1, 1, 1, 0, 1,
