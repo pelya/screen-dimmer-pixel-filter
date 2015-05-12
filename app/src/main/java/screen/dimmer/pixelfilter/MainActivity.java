@@ -67,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                     }).start();
                 }
                 patternSelection[0] = false;
+                Cfg.Save(MainActivity.this);
             }
 
             @Override
@@ -92,6 +93,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                         Grids.Patterns[Cfg.Pattern][i] = (byte)(c.isChecked() ? 1 : 0);
                     }
                     ((Spinner) findViewById(R.id.spinner)).setSelection(Cfg.Pattern, true);
+                    Cfg.Save(MainActivity.this);
                 }
             });
         }
@@ -108,6 +110,20 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
             Log.d(LOG, "GUI: got shutdown intent, stopping service");
             c.setChecked(false);
         }
+
+        Spinner shiftTimer = (Spinner) findViewById(R.id.shift_timer);
+        shiftTimer.setSelection(Cfg.ShiftTimeoutIdx);
+        shiftTimer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Cfg.ShiftTimeoutIdx = (int) id;
+                Cfg.Save(MainActivity.this);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         FilterService.gui = this;
     }

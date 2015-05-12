@@ -21,18 +21,15 @@ import java.util.TimerTask;
 public class FilterService extends Service {
     public static final String LOG = "Pixel Filter";
 
-    public static final int SHIFT_TIMER = 3 * 1000; //60 * 1000; // Shift pattern each minute
-
     public static boolean DEBUG = false; // true;
 
     private WindowManager windowManager;
     private ImageView view;
     private Bitmap bmp;
-    private Timer timer;
+    //private Timer timer;
     private boolean destroyed = false;
     public static boolean running = false;
     public static MainActivity gui = null;
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -84,7 +81,6 @@ public class FilterService extends Service {
 
         windowManager.addView(view, params);
 
-        timer = new Timer();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -92,12 +88,13 @@ public class FilterService extends Service {
                 updatePattern();
                 view.invalidate();
                 if (!destroyed) {
-                    handler.postDelayed(this, SHIFT_TIMER);
+                    handler.postDelayed(this, Grids.ShiftTimeouts[Cfg.ShiftTimeoutIdx]);
                 }
             }
-        }, SHIFT_TIMER);
+        }, Grids.ShiftTimeouts[Cfg.ShiftTimeoutIdx]);
 
         /*
+        timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 if (destroyed) {
@@ -136,7 +133,7 @@ public class FilterService extends Service {
     }
 
     int getShift() {
-        long shift = (System.currentTimeMillis() / SHIFT_TIMER) % Grids.GridSize;
+        long shift = (System.currentTimeMillis() / Grids.ShiftTimeouts[Cfg.ShiftTimeoutIdx]) % Grids.GridSize;
         return Grids.GridShift[(int)shift];
     }
 
