@@ -6,7 +6,7 @@ public class Cfg {
 
     public static boolean Initialized = false;
 
-    public static int Pattern = 0;
+    public static int Pattern = 3;
     //public static byte[] CustomPattern = new byte[Grids.GridSize];
 
     public static void Init(Context ctx) {

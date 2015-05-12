@@ -3,7 +3,7 @@ package screen.dimmer.pixelfilter;
 public class Grids {
 
     public static final int GridSize = 64;
-    public static final int GridSideSize = 64;
+    public static final int GridSideSize = 8;
 
     public static int Id[] = new int[] {
             R.id.checkBox1 ,R.id.checkBox2, R.id.checkBox3, R.id.checkBox4, R.id.checkBox5, R.id.checkBox6, R.id.checkBox7, R.id.checkBox8,
@@ -121,6 +121,18 @@ public class Grids {
                     1, 1, 1, 1, 1, 1, 1, 0,
                     1, 1, 1, 1, 0, 1, 1, 1,
             },
+    };
+
+    // Indexes to shift screen pattern in both vertical and horizontal directions
+    public static byte[] GridShift = new byte[] {
+             0,  1,  8,  9,  2,  3, 10, 11,
+             4,  5, 12, 13,  6,  7, 14, 15,
+            16, 17, 24, 25, 18, 19, 26, 27,
+            20, 21, 28, 29, 22, 23, 30, 31,
+            32, 33, 40, 41, 34, 35, 42, 43,
+            36, 37, 44, 45, 38, 39, 46, 47,
+            48, 49, 56, 57, 50, 51, 58, 59,
+            52, 53, 60, 61, 54, 55, 62, 63,
     };
 
 }
