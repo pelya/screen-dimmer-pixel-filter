@@ -21,7 +21,6 @@ import android.widget.Spinner;
 
 public class MainActivity extends ActionBarActivity implements CompoundButton.OnCheckedChangeListener {
     public static final String LOG = "Pixel Filter";
-    public static final int NTF_ID = 3321;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
         patternSelection[0] = true;
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_filler, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, Grids.PatternNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -44,6 +42,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
                 for (int i = 0; i < Grids.Id.length; i++) {
                     CheckBox c = (CheckBox) findViewById(Grids.Id[i]);
                     c.setChecked(Grids.Patterns[(int) id][i] != (byte) 0);
+                    c.setEnabled(id >= Grids.PatternIdCustom);
                 }
                 Cfg.Pattern = (int) id;
                 ((Spinner) findViewById(R.id.spinner)).setSelection((int) id, true);
@@ -77,22 +76,19 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
         spinner.setSelection(Cfg.Pattern);
 
         for (int i = 0; i < Grids.Id.length; i++) {
-            final int idx = i;
             CheckBox c = (CheckBox)findViewById(Grids.Id[i]);
             c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (patternSelection[0]) {
+                    if (patternSelection[0] || Cfg.Pattern < Grids.PatternIdCustom) {
                         return;
                     }
-                    Log.d(LOG, "GUI: Clicked grid, idx " + idx + " checked " + isChecked);
+                    //Log.d(LOG, "GUI: Clicked grid, idx " + idx + " checked " + isChecked);
                     ((CheckBox) findViewById(R.id.enableFilter)).setChecked(false);
-                    Cfg.Pattern = Grids.PatternIdCustom;
                     for (int i = 0; i < Grids.Id.length; i++) {
                         CheckBox c = (CheckBox) findViewById(Grids.Id[i]);
                         Grids.Patterns[Cfg.Pattern][i] = (byte)(c.isChecked() ? 1 : 0);
                     }
-                    ((Spinner) findViewById(R.id.spinner)).setSelection(Cfg.Pattern, true);
                     Cfg.Save(MainActivity.this);
                 }
             });
@@ -135,31 +131,14 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
             return;
         }
 
-        Log.d(LOG, "GUI: Enabling screen filter: " + isChecked);
         Intent intent = new Intent(this, FilterService.class);
-        NotificationManager ntfMgr = (NotificationManager)getSystemService(Service.NOTIFICATION_SERVICE);
-
         if (isChecked) {
-            PendingIntent show = PendingIntent.getActivity(this, 0, new Intent(Intent.ACTION_DELETE, null, this, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
-            PendingIntent cancel = PendingIntent.getService(this, 0, new Intent(Intent.ACTION_DELETE, null, this, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
-
-            Notification ntf = new Notification.Builder(this)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle(getString(R.string.filter_active))
-                    .setContentText(getString(R.string.filter_active_2))
-                    .setLocalOnly(true)
-                    .setDeleteIntent(cancel)
-                    .setSound(null)
-                    .setContentIntent(show)
-                    .setDeleteIntent(cancel)
-                    .build();
-
-            ntfMgr.notify(NTF_ID, ntf);
             startService(intent);
         } else {
-            ntfMgr.cancel(NTF_ID);
             stopService(intent);
         }
+
+        Log.d(LOG, "GUI: Enabling screen filter: " + isChecked);
     }
 
     @Override

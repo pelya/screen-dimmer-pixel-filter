@@ -14,60 +14,50 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content">
 
             <CheckBox
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Enable filter"
+                android:text="@string/enable_filter_checkbox"
                 android:id="@+id/enableFilter"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:textSize="@dimen/text_big"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
             <Space
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentStart="false"
-                android:layout_below="@+id/enableFilter"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/separator1" />
+                android:id="@+id/separator4" />
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/selectPresetView"
                 android:id="@+id/separator1">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pattern_description"
+                    android:id="@+id/textView2"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
                 <Spinner
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner"
                     android:spinnerMode="dropdown"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="?android:attr/buttonStyleSmall"
-                    android:text="Delete"
-                    android:id="@+id/deletePreset"
-                    android:layout_weight="0"
-                    android:visibility="invisible" />
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
 
             </LinearLayout>
 
             <Space
                 android:layout_width="20dp"
                 android:layout_height="30dp"
-                android:layout_below="@+id/selectPresetView"
-                android:layout_centerHorizontal="true"
                 android:id="@+id/separator2" />
 
             <include layout="@layout/grid" />
@@ -75,8 +65,6 @@
             <Space
                 android:layout_width="20dp"
                 android:layout_height="30dp"
-                android:layout_below="@+id/selectPresetView"
-                android:layout_centerHorizontal="true"
                 android:id="@+id/separator3" />
 
             <LinearLayout
@@ -88,9 +76,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Shift pattern each"
+                    android:text="@string/shift_pattern_description"
                     android:id="@+id/textView"
                     android:layout_weight="1"
+                    android:maxLines="2"
                     android:layout_gravity="center_vertical" />
 
                 <Spinner

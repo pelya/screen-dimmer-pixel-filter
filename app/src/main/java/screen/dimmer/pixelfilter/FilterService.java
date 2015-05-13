@@ -28,6 +28,7 @@ public class FilterService extends Service {
     private Bitmap bmp;
     //private Timer timer;
     private boolean destroyed = false;
+    private boolean intentProcessed = false;
     public static boolean running = false;
     public static MainActivity gui = null;
 
@@ -110,11 +111,17 @@ public class FilterService extends Service {
 
     @Override
     public int onStartCommand (Intent intent, int flags, int startId) {
-        if (intent != null && Intent.ACTION_DELETE.equals(intent.getAction())) {
+        if (intent != null && (Intent.ACTION_DELETE.equals(intent.getAction()) ||
+                Intent.ACTION_INSERT.equals(intent.getAction()) && intentProcessed)) {
             Log.d(LOG, "Service got shutdown intent");
+            Ntf.show(this, false);
             stopSelf();
+            intentProcessed = true;
             return START_NOT_STICKY;
         }
+
+        Ntf.show(this, true);
+        intentProcessed = true;
         return START_STICKY;
     }
 
