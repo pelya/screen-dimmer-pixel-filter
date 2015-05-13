@@ -4,7 +4,12 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -17,10 +22,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
-public class MainActivity extends ActionBarActivity implements CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends ActionBarActivity implements CompoundButton.OnCheckedChangeListener, SensorEventListener {
     public static final String LOG = "Pixel Filter";
+
+    private SensorManager sensors;
+    private Sensor lightSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +130,9 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
             }
         });
 
+        sensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        lightSensor = sensors.getDefaultSensor(Sensor.TYPE_LIGHT);
+
         FilterService.gui = this;
     }
 
@@ -145,6 +157,23 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
     public void onStart() {
         super.onStart();
         updateCheckbox();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (lightSensor != null) {
+            sensors.unregisterListener(this, lightSensor);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateCheckbox();
+        if (lightSensor != null) {
+            sensors.registerListener(this, lightSensor, 2000000, 2000000);
+        }
     }
 
     public void updateCheckbox() {
@@ -180,5 +209,14 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    public void onSensorChanged(SensorEvent event) {
+        TextView lightLevel = (TextView) findViewById(R.id.currentLightLevel);
+        lightLevel.setText(String.valueOf((int)event.values[0]));
     }
 }

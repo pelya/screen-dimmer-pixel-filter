@@ -3,12 +3,16 @@
     <string name="title_activity_main">MainActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">About</string>
     <string name="filter_active">Pixel Filter active</string>
     <string name="filter_active_2">Touch or swipe to disable</string>
     <string name="shift_pattern_description">To prevent pixels burn-in,\nshift pattern each:</string>
     <string name="pattern_description">Pixel pattern:</string>
     <string name="enable_filter_checkbox">Enable filter</string>
+    <string name="enable_light_sensor">Watch light level</string>
+    <string name="current_light_level">Current light level:</string>
+    <string name="light_level_description">Turn off Pixel Filter after detecting bright light</string>
+    <string name="not_available">N/A</string>
 
 
 </resources>

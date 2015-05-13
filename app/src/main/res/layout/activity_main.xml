@@ -90,7 +90,48 @@
                     android:layout_gravity="center_vertical"
                     android:entries="@array/shift_timer"
                     android:spinnerMode="dropdown" />
+
             </LinearLayout>
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="30dp"
+                android:id="@+id/space" />
+
+            <CheckBox
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/enable_light_sensor"
+                android:id="@+id/enableLightSensor"
+                android:textSize="@dimen/text_big"
+                android:gravity="center_vertical"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/light_level_description"
+                android:id="@+id/textView3" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/current_light_level"
+                android:id="@+id/textView4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_available"
+                android:id="@+id/currentLightLevel" />
+
+        </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

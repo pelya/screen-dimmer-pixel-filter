@@ -14,6 +14,8 @@ public class Cfg {
 
     public static int Pattern = 3;
     public static int ShiftTimeoutIdx = 4;
+    public static boolean UseLightSensor = false;
+    public static float LightSensorValue = 500.0f;
 
     public static String SettingsFileName = "settings.cfg";
 
@@ -25,6 +27,8 @@ public class Cfg {
             ObjectInputStream in = new ObjectInputStream(ctx.openFileInput(SettingsFileName));
             Pattern = in.readInt();
             ShiftTimeoutIdx = in.readInt();
+            UseLightSensor = in.readBoolean();
+            LightSensorValue = in.readFloat();
             if (Pattern < 0 || Pattern >= Grids.Patterns.length) {
                 Pattern = 3;
             }
@@ -50,6 +54,8 @@ public class Cfg {
             ObjectOutputStream out = new ObjectOutputStream(ctx.openFileOutput(SettingsFileName, Context.MODE_PRIVATE));
             out.writeInt(Pattern);
             out.writeInt(ShiftTimeoutIdx);
+            out.writeBoolean(UseLightSensor);
+            out.writeFloat(LightSensorValue);
             //Log.d(LOG, "cfg: writing pattern " + Pattern + " ShiftTimeoutIdx " + ShiftTimeoutIdx);
             for (int i = Grids.PatternIdCustom; i < Grids.Patterns.length; i++) {
                 out.write(Grids.Patterns[i]);
