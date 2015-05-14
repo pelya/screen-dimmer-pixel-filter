@@ -10,9 +10,11 @@
     <string name="pattern_description">Pixel pattern:</string>
     <string name="enable_filter_checkbox">Enable filter</string>
     <string name="enable_light_sensor">Watch light level</string>
-    <string name="current_light_level">Current light level:</string>
+    <string name="current_light_level">Current light level, lux:</string>
     <string name="light_level_description">Turn off Pixel Filter after detecting bright light</string>
     <string name="not_available">N/A</string>
+    <string name="disable_on">Turn off after, lux:</string>
+    <string name="current">Current</string>
 
 
 </resources>

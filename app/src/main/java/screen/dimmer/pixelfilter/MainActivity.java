@@ -13,14 +13,18 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -133,6 +137,70 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
         sensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensors.getDefaultSensor(Sensor.TYPE_LIGHT);
 
+        final EditText lightLevel = (EditText) findViewById(R.id.triggerLightLevel);
+        lightLevel.setText(String.valueOf((int)Cfg.LightSensorValue));
+        lightLevel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    Cfg.LightSensorValue = Integer.parseInt(editable.toString());
+                    Cfg.Save(MainActivity.this);
+                } catch (Exception eeeee) {
+                }
+            }
+        });
+
+        CheckBox lightLevelCheckbox = (CheckBox) findViewById(R.id.enableLightSensor);
+        lightLevelCheckbox.setChecked(Cfg.UseLightSensor);
+        lightLevelCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Cfg.UseLightSensor = b;
+                Cfg.Save(MainActivity.this);
+                final CheckBox c = ((CheckBox) findViewById(R.id.enableFilter));
+                boolean wasChecked = c.isChecked();
+                Log.d(LOG, "GUI: setting new light sensor value, checkbox was " + wasChecked);
+                c.setChecked(false);
+                if (wasChecked) {
+                    new Thread(new Runnable() {
+                        public void run() {
+                            while (FilterService.running) {
+                                try { Thread.sleep(20); } catch (Exception e) {}
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    c.setChecked(true);
+                                }
+                            });
+                        }
+                    }).start();
+                }
+            }
+        });
+
+        Button lightSensorUseCurrent = (Button) findViewById(R.id.lightLevelUseCurrent);
+        lightSensorUseCurrent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView currentLightLevel = (TextView)findViewById(R.id.currentLightLevel);
+                lightLevel.setText(currentLightLevel.getText());
+                try {
+                    Cfg.LightSensorValue = Integer.parseInt(currentLightLevel.getText().toString());
+                    Cfg.Save(MainActivity.this);
+                } catch (Exception eeeee) {
+                }
+            }
+        });
+
         FilterService.gui = this;
     }
 
@@ -172,7 +240,7 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
         super.onResume();
         updateCheckbox();
         if (lightSensor != null) {
-            sensors.registerListener(this, lightSensor, 2000000, 2000000);
+            StartSensor.get().registerListener(sensors, this, lightSensor, 2000000, 2000000);
         }
     }
 
@@ -211,10 +279,11 @@ public class MainActivity extends ActionBarActivity implements CompoundButton.On
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
+    @Override
     public void onSensorChanged(SensorEvent event) {
         TextView lightLevel = (TextView) findViewById(R.id.currentLightLevel);
         lightLevel.setText(String.valueOf((int)event.values[0]));

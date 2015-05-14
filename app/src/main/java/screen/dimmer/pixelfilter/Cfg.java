@@ -15,7 +15,7 @@ public class Cfg {
     public static int Pattern = 3;
     public static int ShiftTimeoutIdx = 4;
     public static boolean UseLightSensor = false;
-    public static float LightSensorValue = 500.0f;
+    public static float LightSensorValue = 1000.0f;
 
     public static String SettingsFileName = "settings.cfg";
 

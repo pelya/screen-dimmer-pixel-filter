@@ -1,12 +1,17 @@
 package screen.dimmer.pixelfilter;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
@@ -14,11 +19,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FilterService extends Service {
+public class FilterService extends Service implements SensorEventListener {
     public static final String LOG = "Pixel Filter";
 
     public static boolean DEBUG = false; // true;
@@ -31,6 +37,9 @@ public class FilterService extends Service {
     private boolean intentProcessed = false;
     public static boolean running = false;
     public static MainActivity gui = null;
+
+    private SensorManager sensors = null;
+    private Sensor lightSensor = null;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -94,19 +103,13 @@ public class FilterService extends Service {
             }
         }, Grids.ShiftTimeouts[Cfg.ShiftTimeoutIdx]);
 
-        /*
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            public void run() {
-                if (destroyed) {
-                    timer.cancel();
-                    return;
-                }
-                updatePattern();
-                view.invalidate();
+        if (Cfg.UseLightSensor) {
+            sensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            lightSensor = sensors.getDefaultSensor(Sensor.TYPE_LIGHT);
+            if (lightSensor != null) {
+                StartSensor.get().registerListener(sensors, this, lightSensor, 1200000, 1000000);
             }
-        }, SHIFT_TIMER, SHIFT_TIMER);
-        */
+        }
     }
 
     @Override
@@ -129,9 +132,13 @@ public class FilterService extends Service {
     public void onDestroy() {
         super.onDestroy();
         destroyed = true;
+        if (lightSensor != null) {
+            sensors.unregisterListener(this, lightSensor);
+        }
         if (view != null) {
             windowManager.removeView(view);
         }
+        Ntf.show(this, false);
         Log.d(LOG, "Service stopped");
         running = false;
         MainActivity guiCopy = gui;
@@ -173,6 +180,17 @@ public class FilterService extends Service {
             } else {
                 bmp.setPixel(x, y, color);
             }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.values[0] > Cfg.LightSensorValue) {
+            stopSelf();
         }
     }
 }

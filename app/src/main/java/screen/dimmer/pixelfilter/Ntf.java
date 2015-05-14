@@ -18,7 +18,7 @@ public class Ntf {
             PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
             Notification ntf = new Notification.Builder(ctx)
-                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setSmallIcon(R.drawable.notification)
                     .setContentTitle(ctx.getString(R.string.filter_active))
                     .setContentText(ctx.getString(R.string.filter_active_2))
                     .setLocalOnly(true)
