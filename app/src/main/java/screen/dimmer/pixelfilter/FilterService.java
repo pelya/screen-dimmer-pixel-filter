@@ -1,8 +1,10 @@
 package screen.dimmer.pixelfilter;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -21,8 +23,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class FilterService extends Service implements SensorEventListener {
     public static final String LOG = "Pixel Filter";
@@ -40,6 +40,7 @@ public class FilterService extends Service implements SensorEventListener {
 
     private SensorManager sensors = null;
     private Sensor lightSensor = null;
+    private ScreenOffReceiver screenOffReceiver = null;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -109,6 +110,11 @@ public class FilterService extends Service implements SensorEventListener {
             if (lightSensor != null) {
                 StartSensor.get().registerListener(sensors, this, lightSensor, 1200000, 1000000);
             }
+
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            screenOffReceiver = new ScreenOffReceiver();
+            registerReceiver(screenOffReceiver, filter);
         }
     }
 
@@ -133,6 +139,7 @@ public class FilterService extends Service implements SensorEventListener {
         super.onDestroy();
         destroyed = true;
         if (lightSensor != null) {
+            unregisterReceiver(screenOffReceiver);
             sensors.unregisterListener(this, lightSensor);
         }
         if (view != null) {
@@ -191,6 +198,21 @@ public class FilterService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if (event.values[0] > Cfg.LightSensorValue) {
             stopSelf();
+        }
+    }
+
+    class ScreenOffReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (lightSensor != null) {
+                if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                    //Log.d(LOG, "Service received screen off, disabling light sensor");
+                    sensors.unregisterListener(FilterService.this, lightSensor);
+                } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                    //Log.d(LOG, "Service received screen on, enabling light sensor");
+                    StartSensor.get().registerListener(sensors, FilterService.this, lightSensor, 1200000, 1000000);
+                }
+            }
         }
     }
 }
