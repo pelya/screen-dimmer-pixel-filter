@@ -3,5 +3,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="screen.dimmer.pixelfilter.MainActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100" />
 </menu>

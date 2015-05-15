@@ -1,5 +1,6 @@
 package screen.dimmer.pixelfilter;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,7 +12,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-public class MainActivity extends ActionBarActivity implements CompoundButton.OnCheckedChangeListener, SensorEventListener {
+public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener, SensorEventListener {
     public static final String LOG = "Pixel Filter";
 
     private SensorManager sensors;
