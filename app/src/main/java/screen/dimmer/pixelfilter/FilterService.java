@@ -64,9 +64,9 @@ public class FilterService extends Service implements SensorEventListener {
         view = new ImageView(this);
         DisplayMetrics metrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
-        bmp = Bitmap.createBitmap(metrics, Grids.GridSideSize, Grids.GridSideSize, Bitmap.Config.ARGB_4444);
+        bmp = Bitmap.createBitmap(Grids.GridSideSize, Grids.GridSideSize, Bitmap.Config.ARGB_4444);
         if (DEBUG) {
-            bmp = Bitmap.createBitmap(metrics, Grids.GridSideSize * 4, Grids.GridSideSize * 4, Bitmap.Config.ARGB_4444);
+            bmp = Bitmap.createBitmap(Grids.GridSideSize * 4, Grids.GridSideSize * 4, Bitmap.Config.ARGB_4444);
         }
 
         updatePattern();
