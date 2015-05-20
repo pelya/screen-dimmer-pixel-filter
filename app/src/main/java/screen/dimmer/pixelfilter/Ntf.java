@@ -18,14 +18,15 @@ public class Ntf {
             PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
             Notification ntf = new Notification.Builder(ctx)
-                    .setSmallIcon(R.drawable.notification)
-                    .setContentTitle(ctx.getString(R.string.filter_active))
-                    .setContentText(ctx.getString(R.string.filter_active_2))
-                    .setLocalOnly(true)
-                    .setDeleteIntent(cancel)
-                    .setSound(null)
                     .setContentIntent(show)
+                    .setContentInfo(ctx.getString(R.string.swipe_to_disable))
+                    .setContentText(ctx.getString(R.string.tap_to_configure))
+                    .setContentTitle(ctx.getString(R.string.filter_active))
                     .setDeleteIntent(cancel)
+                    .setSmallIcon(R.drawable.notification)
+                    //.setLocalOnly(true) // Lollipop only
+                    .setSound(null)
+                    .setTicker(ctx.getString(R.string.filter_active))
                     .build();
 
             ntfMgr.notify(NTF_ID, ntf);

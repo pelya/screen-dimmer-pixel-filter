@@ -38,8 +38,25 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         Cfg.Init(this);
+
+        FilterService.gui = this;
+
+        if (getIntent() != null && Intent.ACTION_DELETE.equals(getIntent().getAction())) {
+            //Log.d(LOG, "GUI: got shutdown intent, stopping service");
+            onCheckedChanged(null, false);
+        } else {
+            if (Cfg.FirstStart) {
+                Cfg.FirstStart = false;
+                Cfg.Save(this);
+            } else {
+                onCheckedChanged(null, !FilterService.running);
+                finish();
+                return;
+            }
+        }
+
+        setContentView(R.layout.activity_main);
 
         final Boolean[] patternSelection = new Boolean[1];
         patternSelection[0] = true;
@@ -115,10 +132,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             c.setChecked(true);
         }
         c.setOnCheckedChangeListener(this);
-        if (getIntent() != null && Intent.ACTION_DELETE.equals(getIntent().getAction())) {
-            Log.d(LOG, "GUI: got shutdown intent, stopping service");
-            c.setChecked(false);
-        }
 
         Spinner shiftTimer = (Spinner) findViewById(R.id.shift_timer);
         shiftTimer.setSelection(Cfg.ShiftTimeoutIdx);
@@ -200,8 +213,6 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 }
             }
         });
-
-        FilterService.gui = this;
     }
 
     @Override
@@ -246,8 +257,10 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 
     public void updateCheckbox() {
         CheckBox c = (CheckBox)findViewById(R.id.enableFilter);
-        Log.d(LOG, "GUI: update checkbox: " + FilterService.running);
-        c.setChecked(FilterService.running);
+        //Log.d(LOG, "GUI: update checkbox: " + FilterService.running);
+        if (c != null) {
+            c.setChecked(FilterService.running);
+        }
     }
 
     @Override
@@ -255,6 +268,23 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         super.onDestroy();
         if (FilterService.gui == this)
             FilterService.gui = null;
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        CheckBox c = (CheckBox)findViewById(R.id.enableFilter);
+        if (getIntent() != null && Intent.ACTION_DELETE.equals(getIntent().getAction())) {
+            Log.d(LOG, "GUI: got shutdown intent, stopping service");
+            c.setChecked(false);
+            onCheckedChanged(null, false);
+        } else {
+            boolean newVal = !FilterService.running;
+            c.setChecked(newVal);
+            onCheckedChanged(null, newVal);
+            finish();
+        }
     }
 
     @Override
