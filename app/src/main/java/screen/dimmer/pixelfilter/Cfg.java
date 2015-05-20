@@ -16,6 +16,7 @@ public class Cfg {
     public static int ShiftTimeoutIdx = 4;
     public static boolean UseLightSensor = false;
     public static float LightSensorValue = 1000.0f;
+    public static boolean FirstStart = true;
 
     public static String SettingsFileName = "settings.cfg";
 
@@ -40,6 +41,7 @@ public class Cfg {
                 in.readFully(Grids.Patterns[i]);
             }
             in.close();
+            FirstStart = false;
         } catch (Exception e) {
             Log.d(LOG, "Cannot load config file: " + e);
         }
