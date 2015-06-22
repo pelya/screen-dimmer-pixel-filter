@@ -27,12 +27,10 @@ import android.widget.TextView;
 public class FilterService extends Service implements SensorEventListener {
     public static final String LOG = "Pixel Filter";
 
-    public static boolean DEBUG = false; // true;
-
     private WindowManager windowManager;
     private ImageView view;
     private Bitmap bmp;
-    //private Timer timer;
+
     private boolean destroyed = false;
     private boolean intentProcessed = false;
     public static boolean running = false;
@@ -75,7 +73,6 @@ public class FilterService extends Service implements SensorEventListener {
         draw.setFilterBitmap(false);
         draw.setAntiAlias(false);
         view.setBackground(draw);
-        //view.setImageDrawable(getResources().getDrawable(R.drawable.test));
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -87,15 +84,10 @@ public class FilterService extends Service implements SensorEventListener {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                //WindowManager.LayoutParams.FLAG_DIM_BEHIND,
                 PixelFormat.TRANSPARENT
         );
-        int brightness = 0;
-        for (int i = 0; i < Grids.GridSize; i++) {
-            brightness += (Grids.Patterns[Cfg.Pattern][i] == 0) ? 1 : 0;
-        }
-        params.buttonBrightness = (float)brightness / (float)Grids.GridSize;
-        Log.d(LOG, "Button brightness: " + params.buttonBrightness);
+
+        params.buttonBrightness = 0.0f;
         params.dimAmount = 0.0f;
 
         windowManager.addView(view, params);
@@ -172,29 +164,9 @@ public class FilterService extends Service implements SensorEventListener {
         int shiftY = shift / Grids.GridSideSize;
         for (int i = 0; i < Grids.GridSize; i++) {
             int x = (i + shiftX) % Grids.GridSideSize;
-            //shiftY = 0;
             int y = ((i / Grids.GridSideSize) + shiftY) % Grids.GridSideSize;
             int color = (Grids.Patterns[Cfg.Pattern][i] == 0) ? Color.TRANSPARENT : Color.BLACK;
-            if (DEBUG) {
-                bmp.setPixel(x * 4,     y * 4,     color);
-                bmp.setPixel(x * 4 + 1, y * 4,     color);
-                bmp.setPixel(x * 4 + 2, y * 4,     color);
-                bmp.setPixel(x * 4 + 3, y * 4,     color);
-                bmp.setPixel(x * 4,     y * 4 + 1, color);
-                bmp.setPixel(x * 4 + 1, y * 4 + 1, color);
-                bmp.setPixel(x * 4 + 2, y * 4 + 1, color);
-                bmp.setPixel(x * 4 + 3, y * 4 + 1, color);
-                bmp.setPixel(x * 4,     y * 4 + 2, color);
-                bmp.setPixel(x * 4 + 1, y * 4 + 2, color);
-                bmp.setPixel(x * 4 + 2, y * 4 + 2, color);
-                bmp.setPixel(x * 4 + 3, y * 4 + 2, color);
-                bmp.setPixel(x * 4,     y * 4 + 3, color);
-                bmp.setPixel(x * 4 + 1, y * 4 + 3, color);
-                bmp.setPixel(x * 4 + 2, y * 4 + 3, color);
-                bmp.setPixel(x * 4 + 3, y * 4 + 3, color);
-            } else {
-                bmp.setPixel(x, y, color);
-            }
+            bmp.setPixel(x, y, color);
         }
     }
 
