@@ -50,9 +50,12 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 Cfg.FirstStart = false;
                 Cfg.Save(this);
             } else {
+                boolean serviceRunning = FilterService.running;
                 onCheckedChanged(null, !FilterService.running);
-                finish();
-                return;
+                if (Cfg.EnableNotification || !serviceRunning) { // Show config dialog if notification is disabled
+                    finish();
+                    return;
+                }
             }
         }
 
@@ -211,6 +214,16 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                     Cfg.Save(MainActivity.this);
                 } catch (Exception eeeee) {
                 }
+            }
+        });
+
+        CheckBox enableNtf = (CheckBox)findViewById(R.id.enableNotification);
+        enableNtf.setChecked(Cfg.EnableNotification);
+        enableNtf.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Cfg.EnableNotification = isChecked;
+                Cfg.Save(MainActivity.this);
             }
         });
     }

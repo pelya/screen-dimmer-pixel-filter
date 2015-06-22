@@ -17,6 +17,7 @@ public class Cfg {
     public static boolean UseLightSensor = false;
     public static float LightSensorValue = 1000.0f;
     public static boolean FirstStart = true;
+    public static boolean EnableNotification = true;
 
     public static String SettingsFileName = "settings.cfg";
 
@@ -40,6 +41,7 @@ public class Cfg {
             for (int i = Grids.PatternIdCustom; i < Grids.Patterns.length; i++) {
                 in.readFully(Grids.Patterns[i]);
             }
+            EnableNotification = in.readBoolean();
             in.close();
             FirstStart = false;
         } catch (Exception e) {
@@ -62,6 +64,7 @@ public class Cfg {
             for (int i = Grids.PatternIdCustom; i < Grids.Patterns.length; i++) {
                 out.write(Grids.Patterns[i]);
             }
+            out.writeBoolean(EnableNotification);
             out.close();
         } catch (Exception e) {
             Log.e(LOG, "Cannot save config file: " + e);

@@ -28,14 +28,12 @@
 
             <Space
                 android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:id="@+id/separator4" />
+                android:layout_height="20dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/separator1">
+                android:layout_height="wrap_content" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -57,15 +55,13 @@
 
             <Space
                 android:layout_width="20dp"
-                android:layout_height="30dp"
-                android:id="@+id/separator2" />
+                android:layout_height="30dp" />
 
             <include layout="@layout/grid" />
 
             <Space
                 android:layout_width="20dp"
-                android:layout_height="30dp"
-                android:id="@+id/separator3" />
+                android:layout_height="30dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -95,8 +91,7 @@
 
             <Space
                 android:layout_width="20dp"
-                android:layout_height="30dp"
-                android:id="@+id/space" />
+                android:layout_height="30dp" />
 
             <CheckBox
                 android:layout_width="fill_parent"
@@ -113,7 +108,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/light_level_description"
                 android:id="@+id/textView3" />
-
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -165,6 +159,19 @@
 
             </LinearLayout>
 
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="30dp" />
+
+            <CheckBox
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/enable_notification_checkbox"
+                android:id="@+id/enableNotification"
+                android:textSize="@dimen/text_big"
+                android:gravity="center_vertical"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
         </LinearLayout>
     </ScrollView>
