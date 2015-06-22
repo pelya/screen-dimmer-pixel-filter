@@ -37,7 +37,6 @@ public class Cfg {
             if (ShiftTimeoutIdx < 0 || ShiftTimeoutIdx > Grids.ShiftTimeouts.length) {
                 ShiftTimeoutIdx = 4;
             }
-            Log.d(LOG, "cfg: pattern " + Pattern + " ShiftTimeoutIdx " + ShiftTimeoutIdx);
             for (int i = Grids.PatternIdCustom; i < Grids.Patterns.length; i++) {
                 in.readFully(Grids.Patterns[i]);
             }

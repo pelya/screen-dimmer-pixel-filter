@@ -18,7 +18,7 @@ public class Grids {
     };
 
 
-    public static String[] PatternNames = new String[]{
+    public static String[] PatternNames = new String[] {
             "12%",
             "25%",
             "38%",

@@ -15,5 +15,9 @@
     <string name="tap_to_configure">Tap to configure</string>
     <string name="swipe_to_disable">Swipe to disable</string>
     <string name="enable_notification_checkbox">Enable notification</string>
+    <string name="turn_off">Turn off Pixel Filter</string>
+    <string name="action">Action:</string>
+    <string name="okay">Okay</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

@@ -51,8 +51,9 @@ public class FilterService extends Service implements SensorEventListener {
 
         running = true;
         MainActivity guiCopy = gui;
-        if (guiCopy != null)
+        if (guiCopy != null) {
             guiCopy.updateCheckbox();
+        }
 
         Log.d(LOG, "Service started");
         Cfg.Init(this);
@@ -128,6 +129,11 @@ public class FilterService extends Service implements SensorEventListener {
 
         Ntf.show(this, true);
         intentProcessed = true;
+        if (intent != null) {
+            Cfg.Pattern = intent.getIntExtra(TaskerActivity.BUNDLE_PATTERN, Cfg.Pattern);
+            updatePattern();
+            view.invalidate();
+        }
         return START_STICKY;
     }
 
@@ -156,6 +162,7 @@ public class FilterService extends Service implements SensorEventListener {
     }
 
     void updatePattern() {
+        //Log.d(LOG, "Filter pattern " + Cfg.Pattern);
         int shift = getShift();
         int shiftX = shift % Grids.GridSideSize;
         int shiftY = shift / Grids.GridSideSize;
