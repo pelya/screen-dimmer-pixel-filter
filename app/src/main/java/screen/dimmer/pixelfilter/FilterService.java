@@ -40,6 +40,9 @@ public class FilterService extends Service implements SensorEventListener {
     private Sensor lightSensor = null;
     private ScreenOffReceiver screenOffReceiver = null;
 
+    private int samsungBackLightValue = 0;
+    private String SAMSUNG_BACK_LIGHT_SETTING = "button_key_light";
+
     @Override
     public IBinder onBind(Intent intent) {
     return null;
@@ -114,6 +117,12 @@ public class FilterService extends Service implements SensorEventListener {
             screenOffReceiver = new ScreenOffReceiver();
             registerReceiver(screenOffReceiver, filter);
         }
+
+        try {
+            samsungBackLightValue = android.provider.Settings.System.getInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING);
+            android.provider.Settings.System.putInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING, 0);
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -141,6 +150,12 @@ public class FilterService extends Service implements SensorEventListener {
     public void onDestroy() {
         super.onDestroy();
         destroyed = true;
+
+        try {
+            android.provider.Settings.System.putInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING, samsungBackLightValue);
+        } catch (Exception e) {
+        }
+
         if (lightSensor != null) {
             unregisterReceiver(screenOffReceiver);
             sensors.unregisterListener(this, lightSensor);
