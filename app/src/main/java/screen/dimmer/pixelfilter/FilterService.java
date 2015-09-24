@@ -5,9 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
@@ -19,6 +24,7 @@ import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -75,22 +81,7 @@ public class FilterService extends Service implements SensorEventListener {
         draw.setAntiAlias(false);
         view.setBackground(draw);
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, //WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, //WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, //WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
-                WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                PixelFormat.TRANSPARENT
-        );
-
-        params.buttonBrightness = 0.0f;
-        params.dimAmount = 0.0f;
-
+        WindowManager.LayoutParams params = getLayoutParams();
         windowManager.addView(view, params);
 
         final Handler handler = new Handler();
@@ -123,6 +114,60 @@ public class FilterService extends Service implements SensorEventListener {
             android.provider.Settings.System.putInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING, 0);
         } catch (Exception e) {
         }
+    }
+
+    private WindowManager.LayoutParams getLayoutParams()
+    {
+        //DisplayMetrics metrics = new DisplayMetrics();
+        //windowManager.getDefaultDisplay().getRealMetrics(metrics);
+        Point displaySize = new Point();
+        windowManager.getDefaultDisplay().getRealSize(displaySize);
+        Point windowSize = new Point();
+        windowManager.getDefaultDisplay().getSize(windowSize);
+        displaySize.x += displaySize.x - windowSize.x;
+        displaySize.y += displaySize.y - windowSize.y;
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                displaySize.x, //metrics.widthPixels, // + getNavigationBarWidth(), //WindowManager.LayoutParams.MATCH_PARENT,
+                displaySize.y, //metrics.heightPixels, // + getNavigationBarHeight(), //WindowManager.LayoutParams.MATCH_PARENT,
+                0,
+                0,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, //WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, //WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, //WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
+                        //WindowManager.LayoutParams.FLAG_DIM_BEHIND |
+                        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                PixelFormat.TRANSPARENT
+        );
+
+        params.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_OFF;
+        params.dimAmount = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+        params.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE; // View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        //params.gravity = Gravity.DISPLAY_CLIP_HORIZONTAL | Gravity.DISPLAY_CLIP_VERTICAL;
+        return params;
+    }
+
+    private int getNavigationBarHeight() {
+        Resources resources = getResources();
+        int id = resources.getIdentifier("navigation_bar_height_landscape", "dimen", "android");
+        if (id > 0) {
+            return resources.getDimensionPixelSize(id) * 2;
+        }
+        return 0;
+    }
+
+    private int getNavigationBarWidth() {
+        Resources resources = getResources();
+        int id = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (id > 0) {
+            return resources.getDimensionPixelSize(id) * 2;
+        }
+        return 0;
     }
 
     @Override
@@ -213,5 +258,12 @@ public class FilterService extends Service implements SensorEventListener {
                 }
             }
         }
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d(LOG, "Screen orientation changed, updating window layout");
+        WindowManager.LayoutParams params = getLayoutParams();
+        windowManager.updateViewLayout(view, params);
     }
 }
