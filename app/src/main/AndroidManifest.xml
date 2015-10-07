@@ -22,8 +22,8 @@
 
         <service
             android:name=".FilterService"
-            android:enabled="true"
-            android:configChanges="orientation|screenSize|smallestScreenSize" />
+            android:configChanges="orientation|screenSize|smallestScreenSize"
+            android:enabled="true" />
 
         <receiver
             android:name=".OnOffWidget"
@@ -32,6 +32,7 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/on_off_widget" />
@@ -55,6 +56,8 @@
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".PermissionActivity" android:theme="@android:style/Theme.Dialog" />
 
     </application>
 

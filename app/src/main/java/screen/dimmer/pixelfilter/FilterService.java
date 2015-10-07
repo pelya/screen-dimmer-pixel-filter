@@ -1,5 +1,7 @@
 package screen.dimmer.pixelfilter;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +21,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
@@ -58,6 +61,20 @@ public class FilterService extends Service implements SensorEventListener {
     public void onCreate() {
         super.onCreate();
 
+        /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permissionCheck = checkSelfPermission(Manifest.permission.SYSTEM_ALERT_WINDOW);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                Log.d(LOG, "Permission " + Manifest.permission.SYSTEM_ALERT_WINDOW + " not granted - launching permission activity");
+                Intent intent = new Intent(this, PermissionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                stopSelf();
+                return;
+            }
+        }
+        */
+
         running = true;
         MainActivity guiCopy = gui;
         if (guiCopy != null) {
@@ -82,7 +99,18 @@ public class FilterService extends Service implements SensorEventListener {
         view.setBackground(draw);
 
         WindowManager.LayoutParams params = getLayoutParams();
-        windowManager.addView(view, params);
+        try {
+            windowManager.addView(view, params);
+        } catch (Exception e) {
+            running = false;
+            view = null;
+            Log.d(LOG, "Permission " + Manifest.permission.SYSTEM_ALERT_WINDOW + " not granted - launching permission activity");
+            Intent intent = new Intent(this, PermissionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            stopSelf();
+            return;
+        }
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -183,7 +211,7 @@ public class FilterService extends Service implements SensorEventListener {
 
         Ntf.show(this, true);
         intentProcessed = true;
-        if (intent != null) {
+        if (intent != null && running) {
             Cfg.Pattern = intent.getIntExtra(TaskerActivity.BUNDLE_PATTERN, Cfg.Pattern);
             updatePattern();
             view.invalidate();

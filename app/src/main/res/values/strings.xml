@@ -19,5 +19,6 @@
     <string name="action">Action:</string>
     <string name="okay">Okay</string>
     <string name="cancel">Cancel</string>
+    <string name="permission_denied_text">Cannot enable pixel filter without system permission</string>
 
 </resources>

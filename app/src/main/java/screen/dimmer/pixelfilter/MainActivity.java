@@ -1,5 +1,6 @@
 package screen.dimmer.pixelfilter;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -27,6 +29,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener, SensorEventListener {
@@ -331,4 +334,5 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         TextView lightLevel = (TextView) findViewById(R.id.currentLightLevel);
         lightLevel.setText(String.valueOf((int)event.values[0]));
     }
+
 }
