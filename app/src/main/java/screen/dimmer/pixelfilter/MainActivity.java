@@ -157,7 +157,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         lightSensor = sensors.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         final EditText lightLevel = (EditText) findViewById(R.id.triggerLightLevel);
-        lightLevel.setText(String.valueOf((int)Cfg.LightSensorValue));
+        lightLevel.setText(String.valueOf((int) Cfg.LightSensorValue));
         lightLevel.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -192,7 +192,10 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                     new Thread(new Runnable() {
                         public void run() {
                             while (FilterService.running) {
-                                try { Thread.sleep(20); } catch (Exception e) {}
+                                try {
+                                    Thread.sleep(20);
+                                } catch (Exception e) {
+                                }
                             }
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -210,7 +213,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         lightSensorUseCurrent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView currentLightLevel = (TextView)findViewById(R.id.currentLightLevel);
+                TextView currentLightLevel = (TextView) findViewById(R.id.currentLightLevel);
                 lightLevel.setText(currentLightLevel.getText());
                 try {
                     Cfg.LightSensorValue = Integer.parseInt(currentLightLevel.getText().toString());
@@ -226,6 +229,15 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Cfg.EnableNotification = isChecked;
+                Cfg.Save(MainActivity.this);
+            }
+        });
+        CheckBox swipeNtf = (CheckBox)findViewById(R.id.swipeToDisable);
+        swipeNtf.setChecked(Cfg.SwipeToDisable);
+        swipeNtf.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Cfg.SwipeToDisable = isChecked;
                 Cfg.Save(MainActivity.this);
             }
         });

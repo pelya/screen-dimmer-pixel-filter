@@ -17,17 +17,22 @@ public class Ntf {
             PendingIntent show = PendingIntent.getActivity(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
             PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
-            Notification ntf = new Notification.Builder(ctx)
+            Notification.Builder builder = new Notification.Builder(ctx)
                     .setContentIntent(show)
-                    .setContentInfo(ctx.getString(R.string.swipe_to_disable))
+                    .setContentInfo(Cfg.SwipeToDisable ? ctx.getString(R.string.swipe_to_disable) : "")
                     .setContentText(ctx.getString(R.string.tap_to_configure))
                     .setContentTitle(ctx.getString(R.string.filter_active))
                     .setDeleteIntent(cancel)
+                    .setPriority(Notification.PRIORITY_LOW)
                     .setSmallIcon(R.drawable.notification)
                     //.setLocalOnly(true) // Lollipop only
                     .setSound(null)
-                    .setTicker(ctx.getString(R.string.filter_active))
-                    .build();
+                    .setTicker(ctx.getString(R.string.filter_active));
+
+            if (!Cfg.SwipeToDisable)
+                builder.setOngoing(true);
+
+            Notification ntf = builder.build();
 
             ntfMgr.notify(NTF_ID, ntf);
         } else {

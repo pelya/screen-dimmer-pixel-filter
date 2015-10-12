@@ -173,6 +173,16 @@
                 android:button="@null"
                 android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
 
+            <CheckBox
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/swipe_to_disable"
+                android:id="@+id/swipeToDisable"
+                android:textSize="@dimen/text_big"
+                android:gravity="center_vertical"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+
         </LinearLayout>
     </ScrollView>
 

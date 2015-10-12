@@ -18,6 +18,7 @@ public class Cfg {
     public static float LightSensorValue = 1000.0f;
     public static boolean FirstStart = true;
     public static boolean EnableNotification = true;
+    public static boolean SwipeToDisable = true;
 
     public static String SettingsFileName = "settings.cfg";
 
@@ -41,6 +42,7 @@ public class Cfg {
                 in.readFully(Grids.Patterns[i]);
             }
             EnableNotification = in.readBoolean();
+            SwipeToDisable = in.readBoolean();
             in.close();
             FirstStart = false;
         } catch (Exception e) {
@@ -64,6 +66,7 @@ public class Cfg {
                 out.write(Grids.Patterns[i]);
             }
             out.writeBoolean(EnableNotification);
+            out.writeBoolean(SwipeToDisable);
             out.close();
         } catch (Exception e) {
             Log.e(LOG, "Cannot save config file: " + e);
