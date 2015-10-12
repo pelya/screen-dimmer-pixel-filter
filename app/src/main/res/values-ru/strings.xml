@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Pixel Filter</string>
+    <string name="action_settings">О программе</string>
+    <string name="filter_active">Pixel Filter активирован</string>
+    <string name="ntf_tap_swipe">Нажмите для настройки, смахните для отключения</string>
+    <string name="shift_pattern_description">Для предотвращения выгорания пикселей,\nизменять перекрытие каждые:</string>
+    <string name="pattern_description">Перекрытие:</string>
+    <string name="enable_filter_checkbox">Активировать фильтр</string>
+    <string name="enable_light_sensor">Отслеживать уровень яркости</string>
+    <string name="current_light_level">Текущий уровень яркости, lux:</string>
+    <string name="light_level_description">Деактивировать Pixel Filter после обнаружения яркого света</string>
+    <string name="not_available">N/A</string>
+    <string name="disable_on">Деактивирвать после после, lux:</string>
+    <string name="current">Текущий</string>
+    <string name="tap_to_configure">Нажмите для настройки</string>
+    <string name="swipe_to_disable">Смахните для отключения</string>
+    <string name="enable_notification_checkbox">Включить оповещение</string>
+    <string name="turn_off">Выключить Pixel Filter</string>
+    <string name="action">Действие:</string>
+    <string name="okay">Да</string>
+    <string name="cancel">Отмена</string>
+    <string name="permission_denied_text">Невозможно активировать pixel filter без разрешения системы</string>
+
+</resources>
