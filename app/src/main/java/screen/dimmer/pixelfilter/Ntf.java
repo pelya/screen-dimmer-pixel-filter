@@ -6,11 +6,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class Ntf {
+    public static final String LOG = "Pixel Filter";
     public static final int NTF_ID = 3321;
 
-    public static void show(Context ctx, boolean enable) {
+    public static void show(Service ctx, boolean enable) {
         NotificationManager ntfMgr = (NotificationManager)ctx.getSystemService(Service.NOTIFICATION_SERVICE);
 
         if (enable && Cfg.EnableNotification) {
@@ -33,8 +35,10 @@ public class Ntf {
                 builder.setOngoing(true);
 
             Notification ntf = builder.build();
-
-            ntfMgr.notify(NTF_ID, ntf);
+            if (Cfg.SwipeToDisable)
+                ntfMgr.notify(NTF_ID, ntf);
+            else
+                ctx.startForeground(NTF_ID, ntf);
         } else {
             ntfMgr.cancel(NTF_ID);
         }
