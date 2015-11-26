@@ -32,11 +32,11 @@ import android.os.Bundle;
 
 
 public class TaskerActivity extends Activity {
-    public static final String LOG = "Pixel Filter";
+    public static final String LOG = "Pixel Filter"; //NON-NLS
 
-    public static final String EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
-    public static final String EXTRA_STRING_BLURB = "com.twofortyfouram.locale.intent.extra.BLURB";
-    public static final String BUNDLE_PATTERN = "pattern";
+    public static final String EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE"; //NON-NLS
+    public static final String EXTRA_STRING_BLURB = "com.twofortyfouram.locale.intent.extra.BLURB"; //NON-NLS
+    public static final String BUNDLE_PATTERN = "pattern"; //NON-NLS
 
     int pattern = 0;
     String[] PatternNamesWithOff;

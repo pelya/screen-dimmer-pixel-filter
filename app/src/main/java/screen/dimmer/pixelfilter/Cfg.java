@@ -1,5 +1,6 @@
 package screen.dimmer.pixelfilter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -8,7 +9,7 @@ import java.io.ObjectOutputStream;
 
 public class Cfg {
 
-    public static final String LOG = "Pixel Filter";
+    public static final String LOG = "Pixel Filter"; //NON-NLS
 
     public static boolean Initialized = false;
 
@@ -17,10 +18,8 @@ public class Cfg {
     public static boolean UseLightSensor = false;
     public static float LightSensorValue = 1000.0f;
     public static boolean FirstStart = true;
-    public static boolean EnableNotification = true;
-    public static boolean SwipeToDisable = true;
 
-    public static String SettingsFileName = "settings.cfg";
+    public static String SettingsFileName = "settings.cfg"; //NON-NLS
 
     public static void Init(Context ctx) {
         if (Initialized) {
@@ -41,12 +40,12 @@ public class Cfg {
             for (int i = Grids.PatternIdCustom; i < Grids.Patterns.length; i++) {
                 in.readFully(Grids.Patterns[i]);
             }
-            EnableNotification = in.readBoolean();
-            SwipeToDisable = in.readBoolean();
+            in.readBoolean(); // Not used anymore
+            in.readBoolean(); // Not used anymore
             in.close();
             FirstStart = false;
         } catch (Exception e) {
-            Log.d(LOG, "Cannot load config file: " + e);
+            Log.d(LOG, "Cannot load config file: " + e); //NON-NLS
         }
         Initialized = true;
     }
@@ -65,11 +64,11 @@ public class Cfg {
             for (int i = Grids.PatternIdCustom; i < Grids.Patterns.length; i++) {
                 out.write(Grids.Patterns[i]);
             }
-            out.writeBoolean(EnableNotification);
-            out.writeBoolean(SwipeToDisable);
+            out.writeBoolean(true); // Not used anymore
+            out.writeBoolean(true); // Not used anymore
             out.close();
         } catch (Exception e) {
-            Log.e(LOG, "Cannot save config file: " + e);
+            Log.e(LOG, "Cannot save config file: " + e); //NON-NLS
         }
     }
 }

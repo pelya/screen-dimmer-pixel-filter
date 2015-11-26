@@ -2,11 +2,13 @@ package screen.dimmer.pixelfilter;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -33,7 +35,7 @@ import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener, SensorEventListener {
-    public static final String LOG = "Pixel Filter";
+    public static final String LOG = "Pixel Filter"; //NON-NLS
 
     private SensorManager sensors;
     private Sensor lightSensor;
@@ -42,6 +44,11 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Cfg.Init(this);
+        Grids.PatternNames[Grids.PatternIdCustom] = getString(R.string.custom_1, 1);
+        Grids.PatternNames[Grids.PatternIdCustom + 1] = getString(R.string.custom_1, 2);
+        Grids.PatternNames[Grids.PatternIdCustom + 2] = getString(R.string.custom_1, 3);
+        Grids.PatternNames[Grids.PatternIdCustom + 3] = getString(R.string.custom_1, 4);
+        Grids.PatternNames[Grids.PatternIdCustom + 4] = getString(R.string.custom_1, 5);
 
         FilterService.gui = this;
 
@@ -55,7 +62,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             } else {
                 boolean serviceRunning = FilterService.running;
                 onCheckedChanged(null, !FilterService.running);
-                if (Cfg.EnableNotification || !serviceRunning) { // Show config dialog if notification is disabled
+                if (getIntent() == null || !Intent.ACTION_EDIT.equals(getIntent().getAction())) {
                     finish();
                     return;
                 }
@@ -84,7 +91,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 ((Spinner) findViewById(R.id.spinner)).setSelection((int) id, true);
                 final CheckBox c = ((CheckBox) findViewById(R.id.enableFilter));
                 boolean wasChecked = c.isChecked();
-                Log.d(LOG, "GUI: setting new pattern, checkbox was " + wasChecked);
+                //Log.d(LOG, "GUI: setting new pattern, checkbox was " + wasChecked); //NON-NLS
                 c.setChecked(false);
                 if (wasChecked) {
                     new Thread(new Runnable() {
@@ -115,7 +122,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             CheckBox c = (CheckBox)findViewById(Grids.Id[i]);
             c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
                     if (patternSelection[0] || Cfg.Pattern < Grids.PatternIdCustom) {
                         return;
                     }
@@ -124,6 +131,29 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                     for (int i = 0; i < Grids.Id.length; i++) {
                         CheckBox c = (CheckBox) findViewById(Grids.Id[i]);
                         Grids.Patterns[Cfg.Pattern][i] = (byte)(c.isChecked() ? 1 : 0);
+                    }
+                    boolean totallyBlack = true;
+                    for(byte val: Grids.Patterns[Cfg.Pattern])
+                        if (val == 0)
+                            totallyBlack = false;
+                    if (totallyBlack) {
+                        AlertDialog alert = new AlertDialog.Builder(MainActivity.this)
+                                .setTitle(R.string.screen_black_warn_title)
+                                .setMessage(R.string.screen_black_warn_text)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        buttonView.setChecked(false);
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
                     }
                     Cfg.Save(MainActivity.this);
                 }
@@ -134,7 +164,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 
         CheckBox c = (CheckBox)findViewById(R.id.enableFilter);
         if (FilterService.running) {
-            Log.d(LOG, "GUI: FilterService is running, setting checkbox");
+            Log.d(LOG, "GUI: FilterService is running, setting checkbox"); //NON-NLS
             c.setChecked(true);
         }
         c.setOnCheckedChangeListener(this);
@@ -186,7 +216,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 Cfg.Save(MainActivity.this);
                 final CheckBox c = ((CheckBox) findViewById(R.id.enableFilter));
                 boolean wasChecked = c.isChecked();
-                Log.d(LOG, "GUI: setting new light sensor value, checkbox was " + wasChecked);
+                Log.d(LOG, "GUI: setting new light sensor value, checkbox was " + wasChecked); //NON-NLS
                 c.setChecked(false);
                 if (wasChecked) {
                     new Thread(new Runnable() {
@@ -222,31 +252,12 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 }
             }
         });
-
-        CheckBox enableNtf = (CheckBox)findViewById(R.id.enableNotification);
-        enableNtf.setChecked(Cfg.EnableNotification);
-        enableNtf.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Cfg.EnableNotification = isChecked;
-                Cfg.Save(MainActivity.this);
-            }
-        });
-        CheckBox swipeNtf = (CheckBox)findViewById(R.id.swipeToDisable);
-        swipeNtf.setChecked(Cfg.SwipeToDisable);
-        swipeNtf.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Cfg.SwipeToDisable = isChecked;
-                Cfg.Save(MainActivity.this);
-            }
-        });
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (FilterService.running == isChecked) {
-            Log.d(LOG, "GUI: Service already started, no need to enable it");
+            Log.d(LOG, "GUI: Service already started, no need to enable it"); //NON-NLS
             return;
         }
 
@@ -257,7 +268,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             stopService(intent);
         }
 
-        Log.d(LOG, "GUI: Enabling screen filter: " + isChecked);
+        Log.d(LOG, "GUI: Enabling screen filter: " + isChecked); //NON-NLS
     }
 
     @Override
@@ -304,7 +315,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         setIntent(intent);
         CheckBox c = (CheckBox)findViewById(R.id.enableFilter);
         if (getIntent() != null && Intent.ACTION_DELETE.equals(getIntent().getAction())) {
-            Log.d(LOG, "GUI: got shutdown intent, stopping service");
+            Log.d(LOG, "GUI: got shutdown intent, stopping service"); //NON-NLS
             c.setChecked(false);
             onCheckedChanged(null, false);
         } else {

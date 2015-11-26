@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Please permit Pixel Filter to draw over other apps in system settings"
+        android:text="@string/ask_permission_title"
         android:id="@+id/textView6"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Space
-        android:layout_width="20px"
-        android:layout_height="20px"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_below="@+id/textView6"
         android:layout_centerHorizontal="true"
         android:id="@+id/space" />
@@ -26,15 +26,15 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Open system settings"
+        android:text="@string/ask_permissions_settins"
         android:id="@+id/button"
         android:layout_below="@+id/space"
         android:layout_centerHorizontal="true"
         android:onClick="openSettings" />
 
     <Space
-        android:layout_width="20px"
-        android:layout_height="20px"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
         android:id="@+id/space2" />

@@ -13,13 +13,13 @@ import android.view.View;
 import android.widget.Toast;
 
 public class PermissionActivity extends Activity {
-    public static final String LOG = "Pixel Filter";
+    public static final String LOG = "Pixel Filter"; //NON-NLS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission);
-        Log.d(LOG, "Permission activity started");
+        Log.d(LOG, "Permission activity started"); //NON-NLS
         /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Log.d(LOG, "Requesting permission " + Manifest.permission.SYSTEM_ALERT_WINDOW);
@@ -53,7 +53,7 @@ public class PermissionActivity extends Activity {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_MAIN);
-        intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.applications.ManageApplications"));
+        intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.applications.ManageApplications")); //NON-NLS
 
         startActivity(intent);
         finish();

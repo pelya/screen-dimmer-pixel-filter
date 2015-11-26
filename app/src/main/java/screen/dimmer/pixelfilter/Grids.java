@@ -26,11 +26,11 @@ public class Grids {
             "62%",
             "75%",
             "88%",
-            "Custom 1",
-            "Custom 2",
-            "Custom 3",
-            "Custom 4",
-            "Custom 5",
+            "Custom 1", // NON-NLS
+            "Custom 2", // NON-NLS
+            "Custom 3", // NON-NLS
+            "Custom 4", // NON-NLS
+            "Custom 5", // NON-NLS
     };
 
     public static byte[][] Patterns = new byte[][] {

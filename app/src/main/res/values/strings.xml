@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Pixel Filter</string>
     <string name="action_settings">About</string>
-    <string name="filter_active">Pixel Filter active</string>
+    <string name="filter_active">Pixel Filter active\nTap to disable</string>
     <string name="ntf_tap_swipe">Tap to configure, swipe to disable</string>
     <string name="shift_pattern_description">To prevent pixels burn-in,\nshift pattern each:</string>
     <string name="pattern_description">Pixel pattern:</string>
@@ -19,6 +19,14 @@
     <string name="action">Action:</string>
     <string name="okay">Okay</string>
     <string name="cancel">Cancel</string>
+    <string name="stop">Stop</string>
     <string name="permission_denied_text">Cannot enable pixel filter without system permission</string>
+    <string name="ask_permission_title">Please permit Pixel Filter to draw over other apps in system settings</string>
+    <string name="ask_permissions_settins">Open system settings</string>
+    <string name="custom_1">Custom %d</string>
+    <string name="screen_black_warn_title">The screen will be black.</string>
+    <string name="screen_black_warn_text">The screen will be completely black. Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

@@ -34,7 +34,7 @@ import android.widget.TextView;
 
 
 public class FilterService extends Service implements SensorEventListener {
-    public static final String LOG = "Pixel Filter";
+    public static final String LOG = "Pixel Filter"; //NON-NLS
 
     private WindowManager windowManager;
     private ImageView view;
@@ -50,7 +50,7 @@ public class FilterService extends Service implements SensorEventListener {
     private ScreenOffReceiver screenOffReceiver = null;
 
     private int samsungBackLightValue = 0;
-    private String SAMSUNG_BACK_LIGHT_SETTING = "button_key_light";
+    private String SAMSUNG_BACK_LIGHT_SETTING = "button_key_light"; //NON-NLS
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -81,7 +81,7 @@ public class FilterService extends Service implements SensorEventListener {
             guiCopy.updateCheckbox();
         }
 
-        Log.d(LOG, "Service started");
+        Log.d(LOG, "Service started"); //NON-NLS
         Cfg.Init(this);
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -104,7 +104,7 @@ public class FilterService extends Service implements SensorEventListener {
         } catch (Exception e) {
             running = false;
             view = null;
-            Log.d(LOG, "Permission " + Manifest.permission.SYSTEM_ALERT_WINDOW + " not granted - launching permission activity");
+            Log.d(LOG, "Permission " + Manifest.permission.SYSTEM_ALERT_WINDOW + " not granted - launching permission activity"); //NON-NLS
             Intent intent = new Intent(this, PermissionActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -182,7 +182,7 @@ public class FilterService extends Service implements SensorEventListener {
 
     private int getNavigationBarHeight() {
         Resources resources = getResources();
-        int id = resources.getIdentifier("navigation_bar_height_landscape", "dimen", "android");
+        int id = resources.getIdentifier("navigation_bar_height_landscape", "dimen", "android"); //NON-NLS
         if (id > 0) {
             return resources.getDimensionPixelSize(id) * 2;
         }
@@ -191,7 +191,7 @@ public class FilterService extends Service implements SensorEventListener {
 
     private int getNavigationBarWidth() {
         Resources resources = getResources();
-        int id = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        int id = resources.getIdentifier("navigation_bar_height", "dimen", "android"); //NON-NLS
         if (id > 0) {
             return resources.getDimensionPixelSize(id) * 2;
         }
@@ -202,7 +202,7 @@ public class FilterService extends Service implements SensorEventListener {
     public int onStartCommand (Intent intent, int flags, int startId) {
         if (intent != null && (Intent.ACTION_DELETE.equals(intent.getAction()) ||
                 Intent.ACTION_INSERT.equals(intent.getAction()) && intentProcessed)) {
-            Log.d(LOG, "Service got shutdown intent");
+            Log.d(LOG, "Service got shutdown intent"); //NON-NLS
             Ntf.show(this, false);
             stopSelf();
             intentProcessed = true;
@@ -237,7 +237,7 @@ public class FilterService extends Service implements SensorEventListener {
             windowManager.removeView(view);
         }
         Ntf.show(this, false);
-        Log.d(LOG, "Service stopped");
+        Log.d(LOG, "Service stopped"); //NON-NLS
         running = false;
         MainActivity guiCopy = gui;
         if (guiCopy != null)
@@ -290,7 +290,7 @@ public class FilterService extends Service implements SensorEventListener {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.d(LOG, "Screen orientation changed, updating window layout");
+        Log.d(LOG, "Screen orientation changed, updating window layout"); //NON-NLS
         WindowManager.LayoutParams params = getLayoutParams();
         windowManager.updateViewLayout(view, params);
     }
