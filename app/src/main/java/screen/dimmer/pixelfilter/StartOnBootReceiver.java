@@ -14,7 +14,7 @@ public final class StartOnBootReceiver extends BroadcastReceiver
     public void onReceive(final Context context, final Intent intent)
     {
         // This class is currently unused
-        Cfg.Init(this);
+        Cfg.Init(context);
 
         Intent service = new Intent(context, FilterService.class);
         context.startService(service);
