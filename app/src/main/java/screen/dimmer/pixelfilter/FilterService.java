@@ -37,7 +37,7 @@ public class FilterService extends Service implements SensorEventListener {
     public static final String LOG = "Pixel Filter"; //NON-NLS
 
     private WindowManager windowManager;
-    private ImageView view;
+    private ImageView view = null;
     private Bitmap bmp;
 
     private boolean destroyed = false;
@@ -52,6 +52,8 @@ public class FilterService extends Service implements SensorEventListener {
     private int samsungBackLightValue = 0;
     private String SAMSUNG_BACK_LIGHT_SETTING = "button_key_light"; //NON-NLS
 
+    private int startCounter = 0;
+
     @Override
     public IBinder onBind(Intent intent) {
     return null;
@@ -60,21 +62,6 @@ public class FilterService extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int permissionCheck = checkSelfPermission(Manifest.permission.SYSTEM_ALERT_WINDOW);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                Log.d(LOG, "Permission " + Manifest.permission.SYSTEM_ALERT_WINDOW + " not granted - launching permission activity");
-                Intent intent = new Intent(this, PermissionActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                stopSelf();
-                return;
-            }
-        }
-        */
-
         running = true;
         MainActivity guiCopy = gui;
         if (guiCopy != null) {
@@ -83,6 +70,29 @@ public class FilterService extends Service implements SensorEventListener {
 
         Log.d(LOG, "Service started"); //NON-NLS
         Cfg.Init(this);
+
+        if (Cfg.UseLightSensor) {
+            sensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            lightSensor = sensors.getDefaultSensor(Sensor.TYPE_LIGHT);
+            if (lightSensor != null) {
+                StartSensor.get().registerListener(sensors, this, lightSensor, 1200000, 1000000);
+            }
+
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            screenOffReceiver = new ScreenOffReceiver();
+            registerReceiver(screenOffReceiver, filter);
+        } else {
+            startFilter();
+        }
+        Cfg.WasEnabled = true;
+        Cfg.Save(this);
+    }
+
+    public void startFilter() {
+        if (view != null) {
+            return;
+        }
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -112,10 +122,16 @@ public class FilterService extends Service implements SensorEventListener {
             return;
         }
 
+
+        startCounter++;
+        final int handlerStartCounter = startCounter;
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (view == null || destroyed || handlerStartCounter != startCounter) {
+                    return;
+                }
                 updatePattern();
                 view.invalidate();
                 if (!destroyed) {
@@ -124,24 +140,31 @@ public class FilterService extends Service implements SensorEventListener {
             }
         }, Grids.ShiftTimeouts[Cfg.ShiftTimeoutIdx]);
 
-        if (Cfg.UseLightSensor) {
-            sensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            lightSensor = sensors.getDefaultSensor(Sensor.TYPE_LIGHT);
-            if (lightSensor != null) {
-                StartSensor.get().registerListener(sensors, this, lightSensor, 1200000, 1000000);
+        if (Cfg.SamsungBacklight) {
+            try {
+                samsungBackLightValue = android.provider.Settings.System.getInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING);
+                android.provider.Settings.System.putInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING, 0);
+            } catch (Exception e) {
             }
+        }
+    }
 
-            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            screenOffReceiver = new ScreenOffReceiver();
-            registerReceiver(screenOffReceiver, filter);
+    public void stopFilter() {
+        if (view == null) {
+            return;
         }
 
-        try {
-            samsungBackLightValue = android.provider.Settings.System.getInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING);
-            android.provider.Settings.System.putInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING, 0);
-        } catch (Exception e) {
+        if (Cfg.SamsungBacklight) {
+            try {
+                android.provider.Settings.System.putInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING, samsungBackLightValue);
+            } catch (Exception e) {
+            }
         }
+
+        startCounter++;
+
+        windowManager.removeView(view);
+        view = null;
     }
 
     private WindowManager.LayoutParams getLayoutParams()
@@ -206,12 +229,14 @@ public class FilterService extends Service implements SensorEventListener {
             Ntf.show(this, false);
             stopSelf();
             intentProcessed = true;
+            Cfg.WasEnabled = false;
+            Cfg.Save(this);
             return START_NOT_STICKY;
         }
 
         Ntf.show(this, true);
         intentProcessed = true;
-        if (intent != null && running) {
+        if (intent != null && running && !Cfg.UseLightSensor) {
             Cfg.Pattern = intent.getIntExtra(TaskerActivity.BUNDLE_PATTERN, Cfg.Pattern);
             updatePattern();
             view.invalidate();
@@ -223,22 +248,17 @@ public class FilterService extends Service implements SensorEventListener {
     public void onDestroy() {
         super.onDestroy();
         destroyed = true;
-
-        try {
-            android.provider.Settings.System.putInt(getContentResolver(), SAMSUNG_BACK_LIGHT_SETTING, samsungBackLightValue);
-        } catch (Exception e) {
-        }
+        stopFilter();
 
         if (lightSensor != null) {
             unregisterReceiver(screenOffReceiver);
             sensors.unregisterListener(this, lightSensor);
         }
-        if (view != null) {
-            windowManager.removeView(view);
-        }
         Ntf.show(this, false);
+
         Log.d(LOG, "Service stopped"); //NON-NLS
         running = false;
+
         MainActivity guiCopy = gui;
         if (guiCopy != null)
             guiCopy.updateCheckbox();
@@ -269,7 +289,10 @@ public class FilterService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.values[0] > Cfg.LightSensorValue) {
-            stopSelf();
+            stopFilter();
+        }
+        if (event.values[0] < Cfg.LightSensorValue * 0.6f) {
+            startFilter();
         }
     }
 

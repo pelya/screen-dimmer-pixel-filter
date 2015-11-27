@@ -28,5 +28,6 @@
     <string name="screen_black_warn_text">The screen will be completely black. Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="samsung_backlight">Turn off key backlight on Samsung phones</string>
 
 </resources>

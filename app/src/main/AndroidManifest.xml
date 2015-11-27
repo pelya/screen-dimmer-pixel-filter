@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-   <!-- <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -60,7 +60,6 @@
 
         <activity android:name=".PermissionActivity" android:theme="@android:style/Theme.Dialog" />
 
-<!--
         <receiver
             android:name=".StartOnBootReceiver"
             android:enabled="true"
@@ -69,7 +68,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
--->
+
     </application>
 
 </manifest>

@@ -252,6 +252,16 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 }
             }
         });
+
+        CheckBox samsungBacklight = (CheckBox) findViewById(R.id.samsungBacklight);
+        samsungBacklight.setChecked(Cfg.SamsungBacklight);
+        samsungBacklight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Cfg.SamsungBacklight = b;
+                Cfg.Save(MainActivity.this);
+            }
+        });
     }
 
     @Override
@@ -266,6 +276,8 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             startService(intent);
         } else {
             stopService(intent);
+            Cfg.WasEnabled = false;
+            Cfg.Save(this);
         }
 
         Log.d(LOG, "GUI: Enabling screen filter: " + isChecked); //NON-NLS

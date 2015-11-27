@@ -18,6 +18,8 @@ public class Cfg {
     public static boolean UseLightSensor = false;
     public static float LightSensorValue = 1000.0f;
     public static boolean FirstStart = true;
+    public static boolean WasEnabled = false;
+    public static boolean SamsungBacklight = false;
 
     public static String SettingsFileName = "settings.cfg"; //NON-NLS
 
@@ -42,6 +44,8 @@ public class Cfg {
             }
             in.readBoolean(); // Not used anymore
             in.readBoolean(); // Not used anymore
+            WasEnabled = in.readBoolean();
+            SamsungBacklight = in.readBoolean();
             in.close();
             FirstStart = false;
         } catch (Exception e) {
@@ -66,6 +70,8 @@ public class Cfg {
             }
             out.writeBoolean(true); // Not used anymore
             out.writeBoolean(true); // Not used anymore
+            out.writeBoolean(WasEnabled);
+            out.writeBoolean(SamsungBacklight);
             out.close();
         } catch (Exception e) {
             Log.e(LOG, "Cannot save config file: " + e); //NON-NLS

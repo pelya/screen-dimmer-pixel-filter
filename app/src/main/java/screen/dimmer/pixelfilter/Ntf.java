@@ -21,6 +21,7 @@ public class Ntf {
            // PendingIntent show = PendingIntent.getActivity(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
             PendingIntent edit = PendingIntent.getActivity(ctx, 0, new Intent(Intent.ACTION_EDIT, null, ctx, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
             PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
+
             RemoteViews ntfView = new RemoteViews(ctx.getPackageName(), R.layout.notification);
             ntfView.setOnClickPendingIntent(R.id.notificationConfigure, edit);
             ntfView.setOnClickPendingIntent(R.id.notificationIcon, cancel);
@@ -36,7 +37,7 @@ public class Ntf {
                     .setTicker(null);
 
             // Using reflection so the app will not crash on lower API devices
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder.setLocalOnly(true);
                 builder.setVisibility(Notification.VISIBILITY_PUBLIC);
             }

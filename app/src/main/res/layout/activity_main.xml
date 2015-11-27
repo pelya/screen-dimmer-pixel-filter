@@ -163,6 +163,16 @@
                 android:layout_width="20dp"
                 android:layout_height="30dp" />
 
+            <CheckBox
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/samsung_backlight"
+                android:id="@+id/samsungBacklight"
+                android:textSize="@dimen/text_big"
+                android:gravity="center_vertical"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+
         </LinearLayout>
     </ScrollView>
 

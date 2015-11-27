@@ -32,7 +32,7 @@
 		android:clickable="true"
 		android:paddingLeft="10dp"
 		android:ellipsize="start"
-		android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent" />
+		android:textAppearance="@style/NotificationText" />
 
 	<ImageButton
 		android:layout_width="wrap_content"

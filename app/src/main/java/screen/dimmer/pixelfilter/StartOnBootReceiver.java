@@ -15,8 +15,10 @@ public final class StartOnBootReceiver extends BroadcastReceiver
     {
         // This class is currently unused
         Cfg.Init(context);
-
-        Intent service = new Intent(context, FilterService.class);
-        context.startService(service);
+        if (Cfg.WasEnabled) {
+            context.startService(new Intent(context, FilterService.class));
+            return;
+        }
+        System.exit(0);
     }
 }
