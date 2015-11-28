@@ -3,6 +3,8 @@
     <string name="action_settings">About</string>
     <string name="filter_active">Pixel Filter active\nTap to disable</string>
     <string name="ntf_tap_swipe">Tap to configure, swipe to disable</string>
+    <string name="configure">Configure</string>
+    <string name="disable">Disable</string>
     <string name="shift_pattern_description">To prevent pixels burn-in,\nshift pattern each:</string>
     <string name="pattern_description">Pixel pattern:</string>
     <string name="enable_filter_checkbox">Enable filter</string>
