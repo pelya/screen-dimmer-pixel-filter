@@ -18,8 +18,8 @@ public class Ntf {
         if (enable) {
             PendingIntent edit = PendingIntent.getActivity(ctx, 0, new Intent(Intent.ACTION_EDIT, null, ctx, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
             PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
-            PendingIntent increase = PendingIntent.getActivity(ctx, 0, new Intent(ctx.getString(R.string.intent_darker), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
-            PendingIntent decrease = PendingIntent.getActivity(ctx, 0, new Intent(ctx.getString(R.string.intent_brighter), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent increase = PendingIntent.getService(ctx, 0, new Intent(ctx.getString(R.string.intent_darker), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent decrease = PendingIntent.getService(ctx, 0, new Intent(ctx.getString(R.string.intent_brighter), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
             NotificationCompat.Action.Builder ntf_act_increase = new NotificationCompat.Action.Builder(R.drawable.ic_add_circle_outline,
                     ctx.getString(R.string.darker), increase);

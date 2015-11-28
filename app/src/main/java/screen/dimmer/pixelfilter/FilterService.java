@@ -224,7 +224,7 @@ public class FilterService extends Service implements SensorEventListener {
     @Override
     public int onStartCommand (Intent intent, int flags, int startId) {
         if (Intent.ACTION_DELETE.equals(intent.getAction()) ||
-                Intent.ACTION_INSERT.equals(intent.getAction()) && intentProcessed) {
+                (intentProcessed && Intent.ACTION_INSERT.equals(intent.getAction()))) {
             Log.d(LOG, "Service got shutdown intent"); //NON-NLS
             Ntf.show(this, false);
             stopSelf();
