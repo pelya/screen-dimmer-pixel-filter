@@ -18,15 +18,22 @@ public class Ntf {
         if (enable) {
             PendingIntent edit = PendingIntent.getActivity(ctx, 0, new Intent(Intent.ACTION_EDIT, null, ctx, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
             PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent increase = PendingIntent.getActivity(ctx, 0, new Intent(ctx.getString(R.string.intent_darker), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent decrease = PendingIntent.getActivity(ctx, 0, new Intent(ctx.getString(R.string.intent_brighter), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
-            NotificationCompat.Action.Builder ntf_act_configure = new NotificationCompat.Action.Builder(R.drawable.ic_build_black, ctx.getResources().getString(R.string.configure), edit);
-            NotificationCompat.Action.Builder ntf_act_disable = new NotificationCompat.Action.Builder(R.drawable.ic_close, ctx.getResources().getString(R.string.disable), cancel);
+            NotificationCompat.Action.Builder ntf_act_increase = new NotificationCompat.Action.Builder(R.drawable.ic_add_circle_outline,
+                    ctx.getString(R.string.darker), increase);
+            NotificationCompat.Action.Builder ntf_act_decrease = new NotificationCompat.Action.Builder(R.drawable.ic_remove_circle_outline,
+                    ctx.getString(R.string.brighter), decrease);
+            NotificationCompat.Action.Builder ntf_act_configure = new NotificationCompat.Action.Builder(R.drawable.ic_build,
+                    ctx.getString(R.string.configure), edit);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx)
-                    .setContentTitle(ctx.getResources().getString(R.string.app_name))
-                    .setContentInfo(ctx.getResources().getString(R.string.tap_to_configure))
-                    .setContentIntent(edit)
+                    .setContentTitle(ctx.getString(R.string.app_name))
+                    .setContentText(ctx.getString(R.string.tap_to_disable))
+                    .setContentIntent(cancel)
                     .addAction(ntf_act_configure.build())
-                    .addAction(ntf_act_disable.build())
+                    .addAction(ntf_act_increase.build())
+                    .addAction(ntf_act_decrease.build())
                     .setDeleteIntent(cancel)
                     .setPriority(NotificationCompat.PRIORITY_MIN)
                     .setSmallIcon(R.drawable.notification)

@@ -223,8 +223,8 @@ public class FilterService extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand (Intent intent, int flags, int startId) {
-        if (intent != null && (Intent.ACTION_DELETE.equals(intent.getAction()) ||
-                Intent.ACTION_INSERT.equals(intent.getAction()) && intentProcessed)) {
+        if (Intent.ACTION_DELETE.equals(intent.getAction()) ||
+                Intent.ACTION_INSERT.equals(intent.getAction()) && intentProcessed) {
             Log.d(LOG, "Service got shutdown intent"); //NON-NLS
             Ntf.show(this, false);
             stopSelf();
@@ -236,10 +236,31 @@ public class FilterService extends Service implements SensorEventListener {
 
         Ntf.show(this, true);
         intentProcessed = true;
-        if (intent != null && running && !Cfg.UseLightSensor) {
+        Log.d(LOG, "Service got intent " + intent.getAction()); //NON-NLS
+        if (running && intent.hasExtra(TaskerActivity.BUNDLE_PATTERN)) {
             Cfg.Pattern = intent.getIntExtra(TaskerActivity.BUNDLE_PATTERN, Cfg.Pattern);
-            updatePattern();
-            view.invalidate();
+            if (view != null) {
+                updatePattern();
+                view.invalidate();
+            }
+        }
+        if (running && getString(R.string.intent_brighter).equals(intent.getAction())) {
+            if (Cfg.Pattern > 0 && Cfg.Pattern != Grids.PatternIdCustom)
+                Cfg.Pattern --;
+            Cfg.Save(this);
+            if (view != null) {
+                updatePattern();
+                view.invalidate();
+            }
+        }
+        if (running && getString(R.string.intent_darker).equals(intent.getAction())) {
+            if (Cfg.Pattern + 1 < Grids.Patterns.length && Cfg.Pattern + 1 != Grids.PatternIdCustom)
+                Cfg.Pattern ++;
+            Cfg.Save(this);
+            if (view != null) {
+                updatePattern();
+                view.invalidate();
+            }
         }
         return START_STICKY;
     }
