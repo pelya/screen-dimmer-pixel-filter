@@ -89,25 +89,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 }
                 Cfg.Pattern = (int) id;
                 ((Spinner) findViewById(R.id.spinner)).setSelection((int) id, true);
-                final CheckBox c = ((CheckBox) findViewById(R.id.enableFilter));
-                boolean wasChecked = c.isChecked();
-                //Log.d(LOG, "GUI: setting new pattern, checkbox was " + wasChecked); //NON-NLS
-                c.setChecked(false);
-                if (wasChecked) {
-                    new Thread(new Runnable() {
-                        public void run() {
-                            while (FilterService.running) {
-                                try { Thread.sleep(20); } catch (Exception e) {}
-                            }
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    c.setChecked(true);
-                                }
-                            });
-                        }
-                    }).start();
-                }
+                restartServiceIfNeeded();
                 patternSelection[0] = false;
                 Cfg.Save(MainActivity.this);
             }
@@ -176,10 +158,22 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Cfg.ShiftTimeoutIdx = (int) id;
                 Cfg.Save(MainActivity.this);
+                restartServiceIfNeeded();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        CheckBox hideNotification = (CheckBox) findViewById(R.id.hideNotification);
+        hideNotification.setChecked(Cfg.HideNotification);
+        hideNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Cfg.HideNotification = b;
+                Cfg.Save(MainActivity.this);
+                restartServiceIfNeeded();
             }
         });
 
@@ -214,28 +208,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 Cfg.UseLightSensor = b;
                 Cfg.Save(MainActivity.this);
-                final CheckBox c = ((CheckBox) findViewById(R.id.enableFilter));
-                boolean wasChecked = c.isChecked();
-                Log.d(LOG, "GUI: setting new light sensor value, checkbox was " + wasChecked); //NON-NLS
-                c.setChecked(false);
-                if (wasChecked) {
-                    new Thread(new Runnable() {
-                        public void run() {
-                            while (FilterService.running) {
-                                try {
-                                    Thread.sleep(20);
-                                } catch (Exception e) {
-                                }
-                            }
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    c.setChecked(true);
-                                }
-                            });
-                        }
-                    }).start();
-                }
+                restartServiceIfNeeded();
             }
         });
 
@@ -260,6 +233,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 Cfg.SamsungBacklight = b;
                 Cfg.Save(MainActivity.this);
+                restartServiceIfNeeded();
             }
         });
     }
@@ -319,6 +293,28 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         super.onDestroy();
         if (FilterService.gui == this)
             FilterService.gui = null;
+    }
+
+    public void restartServiceIfNeeded() {
+        final CheckBox c = ((CheckBox) findViewById(R.id.enableFilter));
+        boolean wasChecked = c.isChecked();
+        //Log.d(LOG, "GUI: setting new pattern, checkbox was " + wasChecked); //NON-NLS
+        c.setChecked(false);
+        if (wasChecked) {
+            new Thread(new Runnable() {
+                public void run() {
+                    while (FilterService.running) {
+                        try { Thread.sleep(20); } catch (Exception e) {}
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            c.setChecked(true);
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 
     @Override

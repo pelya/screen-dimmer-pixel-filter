@@ -36,5 +36,7 @@
     <string name="intent_brighter" translatable="false">screen.dimmer.pixelfilter.brighter</string>
     <string name="darker">Darker</string>
     <string name="brighter">Brighter</string>
+    <string name="swipe_to_configure">Swipe down to configure</string>
+    <string name="hide_notification">Hide notification from status bar</string>
 
 </resources>
