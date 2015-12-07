@@ -234,7 +234,6 @@ public class FilterService extends Service implements SensorEventListener {
             return START_NOT_STICKY;
         }
 
-        Ntf.show(this, true);
         intentProcessed = true;
         Log.d(LOG, "Service got intent " + intent.getAction()); //NON-NLS
         if (running && intent.hasExtra(TaskerActivity.BUNDLE_PATTERN)) {
@@ -262,6 +261,7 @@ public class FilterService extends Service implements SensorEventListener {
                 view.invalidate();
             }
         }
+        Ntf.show(this, true);
         return START_STICKY;
     }
 

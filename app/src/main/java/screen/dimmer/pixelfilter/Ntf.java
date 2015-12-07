@@ -28,7 +28,7 @@ public class Ntf {
             NotificationCompat.Action.Builder ntf_act_configure = new NotificationCompat.Action.Builder(R.drawable.ic_build,
                     ctx.getString(R.string.configure), edit);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx)
-                    .setContentTitle(ctx.getString(R.string.app_name))
+                    .setContentTitle(ctx.getString(R.string.app_name) + " - " + Grids.PatternNames[Cfg.Pattern])
                     .setContentText(ctx.getString(R.string.tap_to_disable))
                     .setContentInfo(ctx.getString(R.string.swipe_to_configure))
                     .setContentIntent(cancel)
@@ -42,7 +42,8 @@ public class Ntf {
                     .setOngoing(true)
                     .setLocalOnly(true)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setTicker(null);
+                    .setTicker(null)
+                    .setShowWhen(false);
 
             Notification ntf = builder.build();
             ctx.startForeground(NTF_ID, ntf);
