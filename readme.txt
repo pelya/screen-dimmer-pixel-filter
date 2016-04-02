@@ -7,3 +7,5 @@ Current bugs:
 - Option to hide notification.
 
 - Option to start on battery percentage.
+
+- Diagonal lines on some devices.
