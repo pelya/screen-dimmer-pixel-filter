@@ -10,3 +10,4 @@ Current bugs:
 
 - Fix crashes when watching light level and rotating the phone.
 
+- Diagonal lines on some devices.
