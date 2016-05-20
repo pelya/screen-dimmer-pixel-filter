@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Pixel Filter</string>
+    <string name="action_settings">O programie</string>
+    <string name="filter_active">Pixel Filter aktywny\nDotknij, aby wyłączyć</string>
+    <string name="ntf_tap_swipe">Dotknij, żeby skonfigurować, przesuń, aby wyłączyć</string>
+    <string name="configure">Konfiguruj</string>
+    <string name="disable">Wyłącz</string>
+    <string name="shift_pattern_description">Aby uniknąć wypalania pikseli,\nprzesuń wzór co:</string>
+    <string name="pattern_description">Wzór pikseli:</string>
+    <string name="enable_filter_checkbox">Włącz filtr</string>
+    <string name="enable_light_sensor">Monitoruj poziom jasności</string>
+    <string name="current_light_level">Bieżący poziom jasności (lux):</string>
+    <string name="light_level_description">Wyłącz Pixel Filter po wykryciu jasnego światła</string>
+    <string name="not_available">Brak</string>
+    <string name="disable_on">Wyłączy się gdy (lux):</string>
+    <string name="current">Aktualny</string>
+    <string name="tap_to_configure">Dotknij, aby skonfigurować</string>
+    <string name="swipe_to_disable">Przesuń, aby wyłączyć</string>
+    <string name="enable_notification_checkbox">Włącz powiadomienia</string>
+    <string name="turn_off">Wyłącz Pixel Filter</string>
+    <string name="action">Akcja:</string>
+    <string name="okay">OK</string>
+    <string name="cancel">Anuluj</string>
+    <string name="stop">Stop</string>
+    <string name="permission_denied_text">Nie można włączyć Pixel Filter bez uprawnień systemowych</string>
+    <string name="ask_permission_title">Zezwól Pixel Filter rysować na wierzchu (draw over apps)</string>
+    <string name="ask_permissions_settins">Otwórz ustawienia systemowe</string>
+    <string name="custom_1">Użytkownika %d</string>
+    <string name="screen_black_warn_title">Ekran będzie czarny.</string>
+    <string name="screen_black_warn_text">Ekran stanie się kompletnie czarny. Jesteś pewien?</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="samsung_backlight">Wyłącz podświetlanie klawiszy w telefonach Samsunga</string>
+    <string name="tap_to_disable">Dotknij, aby wyłączyć</string>
+    <string name="intent_darker" translatable="false">screen.dimmer.pixelfilter.darker</string>
+    <string name="intent_brighter" translatable="false">screen.dimmer.pixelfilter.brighter</string>
+    <string name="darker">Ciemniej</string>
+    <string name="brighter">Jaśniej</string>
+    <string name="swipe_to_configure">Przesuń w dół, aby skonfigurować</string>
+    <string name="hide_notification">Ukryj powiadomienia na pasku statustu</string>
+
+</resources>
