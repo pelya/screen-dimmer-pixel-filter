@@ -106,6 +106,7 @@ public class FilterService extends Service implements SensorEventListener {
         draw.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         draw.setFilterBitmap(false);
         draw.setAntiAlias(false);
+        draw.setTargetDensity(metrics.densityDpi);
         view.setBackground(draw);
 
         WindowManager.LayoutParams params = getLayoutParams();
