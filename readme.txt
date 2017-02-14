@@ -10,4 +10,6 @@ Current bugs:
 
 - Fix crashes when watching light level and rotating the phone.
 
-- Diagonal lines on some devices.
+- Diagonal lines on some devices - add option to adjust patten offset.
+
+- Notification tile for Android 7.
