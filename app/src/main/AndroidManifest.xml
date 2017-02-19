@@ -12,6 +12,7 @@
         android:label="@string/app_name" >
         <activity
             android:name=".MainActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="touchscreen|keyboard|keyboardHidden|navigation|screenLayout|uiMode|orientation|screenSize|smallestScreenSize"
             android:label="@string/app_name" >
             <intent-filter>

@@ -68,7 +68,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 }
             }
         }
-
+        setTheme(android.R.style.Theme_DeviceDefault);
         setContentView(R.layout.activity_main);
 
         final Boolean[] patternSelection = new Boolean[1];
