@@ -61,10 +61,20 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 Cfg.Save(this);
             } else {
                 boolean serviceRunning = FilterService.running;
+                int timeout = 1800;
                 onCheckedChanged(null, !FilterService.running);
                 if (getIntent() == null || !Intent.ACTION_EDIT.equals(getIntent().getAction())) {
-                    finish();
-                    return;
+                    long now = System.currentTimeMillis();
+                    if (now > Cfg.FuriousClickingTime + timeout) {
+                        Cfg.FuriousClickingTime = now;
+                        Cfg.FuriousClickingCounter = 1;
+                    } else {
+                        Cfg.FuriousClickingCounter += 1;
+                    }
+                    if (now > Cfg.FuriousClickingTime + timeout || Cfg.FuriousClickingCounter < 4) {
+                        finish();
+                        return;
+                    }
                 }
             }
         }

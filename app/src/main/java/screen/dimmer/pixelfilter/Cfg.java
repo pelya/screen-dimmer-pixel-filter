@@ -24,6 +24,9 @@ public class Cfg {
 
     public static String SettingsFileName = "settings.cfg"; //NON-NLS
 
+    public static int FuriousClickingCounter = 0;
+    public static long FuriousClickingTime = 0;
+
     public static void Init(Context ctx) {
         if (Initialized) {
             return;
