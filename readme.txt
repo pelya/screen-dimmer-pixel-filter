@@ -1,6 +1,6 @@
 Current bugs:
 
-- Soft system buttons are not dimmed.
+- Soft system buttons are not dimmed. This app can write over them somehow: https://play.google.com/store/apps/details?id=pl.damianpiwowarski.navbarapps
 
 - Add Poisson-disc sampling algorithm for lulz.
 
@@ -12,4 +12,5 @@ Current bugs:
 
 - Diagonal lines on some devices - add option to adjust patten offset.
 
-- Notification tile for Android 7.
+- Tapping icon three times furiously should launch Settings dialog.
+
