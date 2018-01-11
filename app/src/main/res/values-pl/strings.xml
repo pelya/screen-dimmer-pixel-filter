@@ -32,8 +32,6 @@
     <string name="no">Nie</string>
     <string name="samsung_backlight">Wyłącz podświetlanie klawiszy w telefonach Samsunga</string>
     <string name="tap_to_disable">Dotknij, aby wyłączyć</string>
-    <string name="intent_darker" translatable="false">screen.dimmer.pixelfilter.darker</string>
-    <string name="intent_brighter" translatable="false">screen.dimmer.pixelfilter.brighter</string>
     <string name="darker">Ciemniej</string>
     <string name="brighter">Jaśniej</string>
     <string name="swipe_to_configure">Przesuń w dół, aby skonfigurować</string>
