@@ -15,9 +15,9 @@ public class Ntf {
     public static void show(Service ctx, boolean enable) {
         NotificationManager ntfMgr = (NotificationManager)ctx.getSystemService(Service.NOTIFICATION_SERVICE);
 
-        if (enable) {
+        if (enable || Cfg.PersistentNotification) {
             PendingIntent edit = PendingIntent.getActivity(ctx, 0, new Intent(Intent.ACTION_EDIT, null, ctx, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
-            PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(Intent.ACTION_DELETE, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent cancel = PendingIntent.getService(ctx, 0, new Intent(enable ? Intent.ACTION_DELETE : Intent.ACTION_RUN, null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
             PendingIntent increase = PendingIntent.getService(ctx, 0, new Intent(ctx.getString(R.string.intent_darker), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
             PendingIntent decrease = PendingIntent.getService(ctx, 0, new Intent(ctx.getString(R.string.intent_brighter), null, ctx, FilterService.class), PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -28,8 +28,9 @@ public class Ntf {
             NotificationCompat.Action.Builder ntf_act_configure = new NotificationCompat.Action.Builder(R.drawable.ic_build,
                     ctx.getString(R.string.configure), edit);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx)
-                    .setContentTitle(ctx.getString(R.string.app_name) + " - " + Grids.PatternNames[Cfg.Pattern])
-                    .setContentText(ctx.getString(R.string.tap_to_disable))
+                    .setContentTitle(ctx.getString(R.string.app_name) +
+                            (enable ? " - " + Grids.PatternNames[Cfg.Pattern] : ""))
+                    .setContentText(enable ? ctx.getString(R.string.tap_to_disable) : ctx.getString(R.string.enable_filter_checkbox))
                     .setContentInfo(ctx.getString(R.string.swipe_to_configure))
                     .setContentIntent(cancel)
                     .addAction(ntf_act_configure.build())

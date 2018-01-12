@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 25
     buildToolsVersion '26.0.3'
 
     defaultConfig {
         applicationId "screen.dimmer.pixelfilter"
         minSdkVersion 17
-        targetSdkVersion 27
+        targetSdkVersion 25
+        maxSdkVersion 25 // Android O deprecated overlay windows
         versionCode 23
         versionName "2.3"
     }
@@ -25,5 +26,5 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support:support-v4:25.3.1'
 }

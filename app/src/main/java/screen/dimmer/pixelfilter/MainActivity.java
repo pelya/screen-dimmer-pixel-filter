@@ -187,6 +187,17 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
             }
         });
 
+        CheckBox persistentNotification = (CheckBox) findViewById(R.id.persistentNotification);
+        persistentNotification.setChecked(Cfg.PersistentNotification);
+        persistentNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Cfg.PersistentNotification = b;
+                Cfg.Save(MainActivity.this);
+                restartServiceIfNeeded();
+            }
+        });
+
         sensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensors.getDefaultSensor(Sensor.TYPE_LIGHT);
 
@@ -307,10 +318,10 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 
     public void restartServiceIfNeeded() {
         final CheckBox c = ((CheckBox) findViewById(R.id.enableFilter));
-        boolean wasChecked = c.isChecked();
+        final boolean wasChecked = c.isChecked();
         //Log.d(LOG, "GUI: setting new pattern, checkbox was " + wasChecked); //NON-NLS
         c.setChecked(false);
-        if (wasChecked) {
+        if (wasChecked || Cfg.PersistentNotification) {
             new Thread(new Runnable() {
                 public void run() {
                     while (FilterService.running) {
@@ -320,6 +331,9 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                         @Override
                         public void run() {
                             c.setChecked(true);
+                            if (!wasChecked) {
+                                c.setChecked(false);
+                            }
                         }
                     });
                 }

@@ -13,10 +13,13 @@ public final class StartOnBootReceiver extends BroadcastReceiver
     @Override
     public void onReceive(final Context context, final Intent intent)
     {
-        // This class is currently unused
         Cfg.Init(context);
-        if (Cfg.WasEnabled) {
-            context.startService(new Intent(context, FilterService.class));
+        if (Cfg.WasEnabled || Cfg.PersistentNotification) {
+            Intent service = new Intent(context, FilterService.class);
+            if (!Cfg.WasEnabled) {
+                service.setAction(Intent.ACTION_DELETE);
+            }
+            context.startService(service);
             return;
         }
         System.exit(0);

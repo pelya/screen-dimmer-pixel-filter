@@ -98,7 +98,7 @@ public class FilterService extends Service implements SensorEventListener {
 
         view = new ImageView(this);
         DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
+        windowManager.getDefaultDisplay().getRealMetrics(metrics);
         bmp = Bitmap.createBitmap(Grids.GridSideSize, Grids.GridSideSize, Bitmap.Config.ARGB_4444);
 
         updatePattern();
@@ -106,7 +106,7 @@ public class FilterService extends Service implements SensorEventListener {
         draw.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         draw.setFilterBitmap(false);
         draw.setAntiAlias(false);
-        draw.setTargetDensity(metrics.densityDpi);
+        draw.setTargetDensity(metrics);
         view.setBackground(draw);
 
         WindowManager.LayoutParams params = getLayoutParams();
@@ -116,6 +116,7 @@ public class FilterService extends Service implements SensorEventListener {
             running = false;
             view = null;
             Log.d(LOG, "Permission " + Manifest.permission.SYSTEM_ALERT_WINDOW + " not granted - launching permission activity"); //NON-NLS
+            Log.d(LOG, e.toString()); //NON-NLS
             Intent intent = new Intent(this, PermissionActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -184,14 +185,18 @@ public class FilterService extends Service implements SensorEventListener {
                 displaySize.y, //metrics.heightPixels, // + getNavigationBarHeight(), //WindowManager.LayoutParams.MATCH_PARENT,
                 0,
                 0,
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, //WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, //WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, //WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                //Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
+                //WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, // WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                        //WindowManager.LayoutParams.FLAG_FULLSCREEN |
                         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        //WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        //(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ?
+                        //WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN : 0) |
                         WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
+                        //WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
                         //WindowManager.LayoutParams.FLAG_DIM_BEHIND |
                         WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSPARENT
@@ -228,11 +233,21 @@ public class FilterService extends Service implements SensorEventListener {
                 (intentProcessed && Intent.ACTION_INSERT.equals(intent.getAction()))) {
             Log.d(LOG, "Service got shutdown intent"); //NON-NLS
             Ntf.show(this, false);
-            stopSelf();
             intentProcessed = true;
             Cfg.WasEnabled = false;
             Cfg.Save(this);
-            return START_NOT_STICKY;
+            if (!Cfg.PersistentNotification) {
+                stopSelf();
+                return START_NOT_STICKY;
+            } else {
+                stopFilter();
+                return START_STICKY;
+            }
+        }
+        if (Cfg.PersistentNotification && Intent.ACTION_RUN.equals(intent.getAction())) {
+            startFilter();
+            Cfg.WasEnabled = true;
+            Cfg.Save(this);
         }
 
         intentProcessed = true;
@@ -245,8 +260,9 @@ public class FilterService extends Service implements SensorEventListener {
             }
         }
         if (running && getString(R.string.intent_brighter).equals(intent.getAction())) {
-            if (Cfg.Pattern > 0 && Cfg.Pattern != Grids.PatternIdCustom)
-                Cfg.Pattern --;
+            if (Cfg.Pattern > 0 && Cfg.Pattern != Grids.PatternIdCustom) {
+                Cfg.Pattern--;
+            }
             Cfg.Save(this);
             if (view != null) {
                 updatePattern();
@@ -254,8 +270,9 @@ public class FilterService extends Service implements SensorEventListener {
             }
         }
         if (running && getString(R.string.intent_darker).equals(intent.getAction())) {
-            if (Cfg.Pattern + 1 < Grids.Patterns.length && Cfg.Pattern + 1 != Grids.PatternIdCustom)
-                Cfg.Pattern ++;
+            if (Cfg.Pattern + 1 < Grids.Patterns.length && Cfg.Pattern + 1 != Grids.PatternIdCustom) {
+                Cfg.Pattern++;
+            }
             Cfg.Save(this);
             if (view != null) {
                 updatePattern();

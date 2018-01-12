@@ -115,14 +115,14 @@
       <excludeFolder url="file://$MODULE_DIR$/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 26 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 25 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="com.android.support:support-v4-26.0.0-alpha1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-annotations:26.0.0-alpha1@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-compat-26.0.0-alpha1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-core-utils-26.0.0-alpha1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-fragment-26.0.0-alpha1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-media-compat-26.0.0-alpha1" level="project" />
-    <orderEntry type="library" name="com.android.support:support-core-ui-26.0.0-alpha1" level="project" />
+    <orderEntry type="library" name="com.android.support:support-core-utils-25.3.1" level="project" />
+    <orderEntry type="library" name="com.android.support:support-v4-25.3.1" level="project" />
+    <orderEntry type="library" name="com.android.support:support-fragment-25.3.1" level="project" />
+    <orderEntry type="library" name="com.android.support:support-annotations:25.3.1@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:support-core-ui-25.3.1" level="project" />
+    <orderEntry type="library" name="com.android.support:support-media-compat-25.3.1" level="project" />
+    <orderEntry type="library" name="com.android.support:support-compat-25.3.1" level="project" />
   </component>
 </module>

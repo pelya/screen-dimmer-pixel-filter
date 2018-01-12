@@ -21,6 +21,7 @@ public class Cfg {
     public static boolean WasEnabled = false;
     public static boolean SamsungBacklight = false;
     public static boolean HideNotification = true;
+    public static boolean PersistentNotification = true;
 
     public static String SettingsFileName = "settings.cfg"; //NON-NLS
 
@@ -51,8 +52,9 @@ public class Cfg {
             WasEnabled = in.readBoolean();
             SamsungBacklight = in.readBoolean();
             HideNotification = in.readBoolean();
-            in.close();
             FirstStart = false;
+            PersistentNotification = in.readBoolean();
+            in.close();
         } catch (Exception e) {
             Log.d(LOG, "Cannot load config file: " + e); //NON-NLS
         }
@@ -78,6 +80,7 @@ public class Cfg {
             out.writeBoolean(WasEnabled);
             out.writeBoolean(SamsungBacklight);
             out.writeBoolean(HideNotification);
+            out.writeBoolean(PersistentNotification);
             out.close();
         } catch (Exception e) {
             Log.e(LOG, "Cannot save config file: " + e); //NON-NLS

@@ -4,8 +4,6 @@ Current bugs:
 
 - Add Poisson-disc sampling algorithm for lulz.
 
-- Toggle on/off with notification not removing itself.
-
 - Option to start on battery percentage.
 
 - Fix crashes when watching light level and rotating the phone.

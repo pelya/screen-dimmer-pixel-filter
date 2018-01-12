@@ -111,6 +111,20 @@
             <CheckBox
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/persistent_notification"
+                android:id="@+id/persistentNotification"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="30dp" />
+
+            <CheckBox
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/enable_light_sensor"
                 android:id="@+id/enableLightSensor"
                 android:textSize="20sp"

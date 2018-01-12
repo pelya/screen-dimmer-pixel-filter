@@ -37,6 +37,7 @@
     <string name="darker">Darker</string>
     <string name="brighter">Brighter</string>
     <string name="swipe_to_configure">Swipe down to configure</string>
-    <string name="hide_notification">Hide notification from status bar</string>
+    <string name="hide_notification">Less visible notification</string>
+    <string name="persistent_notification">Notification when filter not active</string>
 
 </resources>
