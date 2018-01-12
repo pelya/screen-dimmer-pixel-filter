@@ -106,7 +106,8 @@ public class FilterService extends Service implements SensorEventListener {
         draw.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         draw.setFilterBitmap(false);
         draw.setAntiAlias(false);
-        draw.setTargetDensity(metrics);
+        draw.setTargetDensity(metrics.densityDpi);
+
         view.setBackground(draw);
 
         WindowManager.LayoutParams params = getLayoutParams();
@@ -187,14 +188,14 @@ public class FilterService extends Service implements SensorEventListener {
                 0,
                 //Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
                 //WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, // WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
                         //WindowManager.LayoutParams.FLAG_FULLSCREEN |
                         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        //WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
-                        //(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ?
-                        //WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN : 0) |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ?
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN : 0) |
                         WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                         //WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
                         //WindowManager.LayoutParams.FLAG_DIM_BEHIND |
