@@ -61,7 +61,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                 Cfg.Save(this);
             } else {
                 boolean serviceRunning = FilterService.running;
-                int timeout = 1800;
+                int timeout = 1600;
                 onCheckedChanged(null, !FilterService.running);
                 if (getIntent() == null || !Intent.ACTION_EDIT.equals(getIntent().getAction())) {
                     long now = System.currentTimeMillis();
@@ -71,7 +71,7 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
                     } else {
                         Cfg.FuriousClickingCounter += 1;
                     }
-                    if (now > Cfg.FuriousClickingTime + timeout || Cfg.FuriousClickingCounter < 4) {
+                    if (now > Cfg.FuriousClickingTime + timeout || Cfg.FuriousClickingCounter < 3) {
                         finish();
                         return;
                     }
