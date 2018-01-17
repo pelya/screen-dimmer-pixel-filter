@@ -8,9 +8,9 @@ android {
         applicationId "screen.dimmer.pixelfilter"
         minSdkVersion 17
         targetSdkVersion 25
-        maxSdkVersion 25 // Android O deprecated overlay windows
-        versionCode 23
-        versionName "2.3"
+        // maxSdkVersion 25 // Android O deprecated overlay windows
+        versionCode 24
+        versionName "2.4"
     }
     buildTypes {
         release {
