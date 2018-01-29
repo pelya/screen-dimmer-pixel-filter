@@ -7,3 +7,5 @@ Current bugs:
 - Fix crashes when watching light level and rotating the phone.
 
 - Diagonal lines on some devices - auto-calibrate bitmap offset using a screenshot.
+
+- Filter does not cover navigation buttons fully when the keyboard is shown.
