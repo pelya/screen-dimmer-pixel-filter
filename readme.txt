@@ -1,3 +1,8 @@
+=== THIS PROJECT IS ABANDONED ===
+
+Android 8 disallows any app to draw over notification panel or navigation buttons,
+so Pixel Filter cannot work properly on any newer phone, and nothing can be done about that.
+
 Current bugs:
 
 - Add Poisson-disc sampling algorithm for lulz.
